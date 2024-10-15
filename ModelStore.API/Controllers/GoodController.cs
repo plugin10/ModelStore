@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using ModelStore.API.Mapping;
 using ModelStore.Application.Models;
 using ModelStore.Application.Repositories;
 using ModelStore.Contracts.Requests;
@@ -19,13 +20,7 @@ namespace ModelStore.API.Controllers
         [HttpPost("goods")]
         public async Task<IActionResult> Create([FromBody]CreateGoodRequest request)
         {
-            var good = new Good
-            {
-                Id = Guid.NewGuid(),
-                Name = request.Name,
-                Ammount = request.Ammount,
-                Description = request.Description,
-            };
+            var good = request.MapToGood();
 
             await _goodRepository.CreateAsync(good);
 
