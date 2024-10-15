@@ -7,7 +7,6 @@ using ModelStore.Contracts.Requests;
 namespace ModelStore.API.Controllers
 {
     [ApiController]
-    [Route("api")]
     public class GoodController : ControllerBase
     {
         private readonly IGoodRepository _goodRepository;
@@ -17,14 +16,14 @@ namespace ModelStore.API.Controllers
             _goodRepository = goodRepository;
         }
 
-        [HttpPost("goods")]
+        [HttpPost(ApiEndpoints.Goods.Create)]
         public async Task<IActionResult> Create([FromBody]CreateGoodRequest request)
         {
             var good = request.MapToGood();
 
             await _goodRepository.CreateAsync(good);
 
-            return Created($"api/goods/{good.Id}", good);
+            return Created($"/{ApiEndpoints.Goods.Create}/{good.Id}", good);
         }
     }
 }
