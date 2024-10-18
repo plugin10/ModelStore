@@ -25,5 +25,28 @@ namespace ModelStore.API.Controllers
 
             return Created($"/{ApiEndpoints.Goods.Create}/{good.Id}", good);
         }
+
+        [HttpGet(ApiEndpoints.Goods.Get)]
+        public async Task<IActionResult> Get([FromRoute] Guid id)
+        {
+            var good = await _goodRepository.GetByIdAsync(id);
+            if (good == null)
+            {
+                return NotFound();
+            }
+
+            var response = good.MapToResponse();
+            return Ok(response);
+        }
+
+
+        [HttpGet(ApiEndpoints.Goods.GetAll)]
+        public async Task<IActionResult> GetAll()
+        {
+            var goods = await _goodRepository.GetAllAsync();
+
+            var goodsResponse = goods.MapToResponse();
+            return Ok(goodsResponse);
+        }
     }
 }

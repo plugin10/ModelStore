@@ -1,5 +1,6 @@
 ﻿using ModelStore.Application.Models;
 using ModelStore.Contracts.Requests;
+using ModelStore.Contracts.Responses;
 
 namespace ModelStore.API.Mapping
 {
@@ -13,6 +14,25 @@ namespace ModelStore.API.Mapping
                 Name = request.Name,
                 Ammount = request.Ammount,
                 Description = request.Description,
+            };
+        }
+
+        public static GoodResponse MapToResponse(this Good good) 
+        {
+            return new GoodResponse 
+            {
+                Id = good.Id,
+                Name = good.Name,
+                Ammount = good.Ammount,
+                Description = good.Description 
+            };
+        }
+
+        public static GoodsResponse MapToResponse(this IEnumerable<Good> goods)
+        {
+            return new GoodsResponse
+            {
+                Items = goods.Select(MapToResponse),
             };
         }
     }
