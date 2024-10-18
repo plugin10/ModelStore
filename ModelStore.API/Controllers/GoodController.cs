@@ -62,5 +62,16 @@ namespace ModelStore.API.Controllers
 
             return Ok(updated);
         }
+
+        [HttpDelete(ApiEndpoints.Goods.Delete)]
+        public async Task<IActionResult> Delete([FromRoute] Guid id)
+        {
+            var deleted = await _goodRepository.DeleteGoodAsync(id);
+            if (!deleted)
+            {
+                return NotFound();
+            }
+            return Ok();
+        }
     }
 }
