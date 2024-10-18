@@ -23,7 +23,7 @@ namespace ModelStore.API.Controllers
 
             await _goodRepository.CreateAsync(good);
 
-            return Created($"/{ApiEndpoints.Goods.Create}/{good.Id}", good);
+            return CreatedAtAction(nameof(Get), new {id = good.Id}, good);
         }
 
         [HttpGet(ApiEndpoints.Goods.Get)]
