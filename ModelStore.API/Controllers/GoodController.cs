@@ -48,5 +48,19 @@ namespace ModelStore.API.Controllers
             var goodsResponse = goods.MapToResponse();
             return Ok(goodsResponse);
         }
+
+        [HttpPut(ApiEndpoints.Goods.Update)]
+        public async Task<IActionResult> Update([FromRoute] Guid id,
+            [FromBody]UpdateGoodRequest request)
+        {
+            var good = request.MapToGood(id);
+            var updated = await _goodRepository.UpdateGoodAsync(good);
+            if (!updated)
+            {
+                return NotFound();
+            }
+
+            return Ok(updated);
+        }
     }
 }

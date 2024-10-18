@@ -17,6 +17,17 @@ namespace ModelStore.API.Mapping
             };
         }
 
+        public static Good MapToGood(this UpdateGoodRequest request, Guid id)
+        {
+            return new Good
+            {
+                Id = id,
+                Name = request.Name,
+                Ammount = request.Ammount,
+                Description = request.Description,
+            };
+        }
+
         public static GoodResponse MapToResponse(this Good good) 
         {
             return new GoodResponse 
