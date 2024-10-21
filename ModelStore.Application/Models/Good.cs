@@ -12,6 +12,8 @@ namespace ModelStore.Application.Models
 
         public required string Name { get; set; }
 
+        public required string Brand { get; set; }
+
         public int Ammount { get; set; }
 
         public string Description { get; set; }
