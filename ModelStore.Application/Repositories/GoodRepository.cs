@@ -24,6 +24,12 @@ namespace ModelStore.Application.Repositories
             return Task.FromResult(good);
         }
 
+        public Task<Good?> GetBySlugAsync(string slug)
+        {
+            var good = _goods.SingleOrDefault(g => g.Slug == slug);
+            return Task.FromResult(good);
+        }
+
         public Task<IEnumerable<Good>> GetAllAsync()
         {
             return Task.FromResult(_goods.AsEnumerable());

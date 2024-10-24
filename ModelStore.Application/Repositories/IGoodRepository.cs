@@ -13,6 +13,8 @@ namespace ModelStore.Application.Repositories
 
         Task<Good?> GetByIdAsync(Guid id);
 
+        Task<Good?> GetBySlugAsync(string slug);
+
         Task<IEnumerable<Good>> GetAllAsync();
 
         Task<bool> UpdateGoodAsync(Good good);

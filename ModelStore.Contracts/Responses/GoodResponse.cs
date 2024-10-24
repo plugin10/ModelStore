@@ -14,6 +14,8 @@ namespace ModelStore.Contracts.Responses
 
         public required string Brand { get; set; }
 
+        public required string Slug { get; set; }
+
         public int Ammount { get; init; } = 0;
 
         public string Description { get; init; } = string.Empty;

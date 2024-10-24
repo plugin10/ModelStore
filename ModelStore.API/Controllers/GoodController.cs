@@ -23,13 +23,17 @@ namespace ModelStore.API.Controllers
 
             await _goodRepository.CreateAsync(good);
 
-            return CreatedAtAction(nameof(Get), new {id = good.Id}, good);
+            return CreatedAtAction(nameof(Get), new { idOrSlug = good.Id}, good);
         }
 
         [HttpGet(ApiEndpoints.Goods.Get)]
-        public async Task<IActionResult> Get([FromRoute] Guid id)
+        public async Task<IActionResult> Get([FromRoute] string idOrSlug)
         {
-            var good = await _goodRepository.GetByIdAsync(id);
+            var good = Guid.TryParse(idOrSlug, out var id) 
+                ? await _goodRepository.GetByIdAsync(id)
+                : await _goodRepository.GetBySlugAsync(idOrSlug);
+
+
             if (good == null)
             {
                 return NotFound();

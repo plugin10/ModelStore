@@ -12,6 +12,7 @@ namespace ModelStore.API.Mapping
             {
                 Id = Guid.NewGuid(),
                 Name = request.Name,
+                Brand = request.Brand,
                 Ammount = request.Ammount,
                 Description = request.Description,
             };
@@ -23,6 +24,7 @@ namespace ModelStore.API.Mapping
             {
                 Id = id,
                 Name = request.Name,
+                Brand = request.Brand,
                 Ammount = request.Ammount,
                 Description = request.Description,
             };
@@ -34,6 +36,8 @@ namespace ModelStore.API.Mapping
             {
                 Id = good.Id,
                 Name = good.Name,
+                Brand = good.Brand,
+                Slug = good.Slug,
                 Ammount = good.Ammount,
                 Description = good.Description 
             };
