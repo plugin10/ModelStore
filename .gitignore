@@ -361,3 +361,5 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/ModelStore.API/Mapping/mssql-data
+/ModelStore.API/Mapping/docker-compose.yml
