@@ -13,7 +13,7 @@ namespace ModelStore.Application
     {
         public static IServiceCollection AddApplication(this IServiceCollection services) 
         {
-            services.AddSingleton<IGoodRepository, GoodRepository>();
+            services.AddSingleton<IProductRepository, ProductRepository>();
             return services;
         }
 

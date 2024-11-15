@@ -4,9 +4,9 @@
     {
         private const string ApiBase = "api";
 
-        public static class Goods
+        public static class Products
         {
-            private const string Base = $"{ApiBase}/goods";
+            private const string Base = $"{ApiBase}/products";
 
             public const string Create = Base;
             public const string Get = $"{Base}/{{idOrSlug}}";

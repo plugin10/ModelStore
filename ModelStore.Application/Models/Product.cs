@@ -7,20 +7,21 @@ using System.Threading.Tasks;
 
 namespace ModelStore.Application.Models
 {
-    public partial class Good
+    public partial class Product
     {
-        public required Guid Id { get; init; }
+        public Guid Id { get; init; }
 
-        public required string Name { get; set; }
+        public string Name { get; set; }
 
-        public required string Brand { get; set; }
+        public string Brand { get; set; }
 
         public string Slug => GenetateSlug();
 
         public int Ammount { get; set; }
 
-        public string Description { get; set; }
+        public List<string> Categories { get; init; } = new();
 
+        public string Description { get; set; }
 
         private string GenetateSlug()
         {

@@ -7,32 +7,31 @@ using ModelStore.Contracts.Requests;
 namespace ModelStore.API.Controllers
 {
     [ApiController]
-    public class GoodController : ControllerBase
+    public class ProductController : ControllerBase
     {
-        private readonly IGoodRepository _goodRepository;
+        private readonly IProductRepository _goodRepository;
 
-        public GoodController(IGoodRepository goodRepository)
+        public ProductController(IProductRepository goodRepository)
         {
             _goodRepository = goodRepository;
         }
 
-        [HttpPost(ApiEndpoints.Goods.Create)]
-        public async Task<IActionResult> Create([FromBody]CreateGoodRequest request)
+        [HttpPost(ApiEndpoints.Products.Create)]
+        public async Task<IActionResult> Create([FromBody] CreateProductRequest request)
         {
             var good = request.MapToGood();
 
             await _goodRepository.CreateAsync(good);
 
-            return CreatedAtAction(nameof(Get), new { idOrSlug = good.Id}, good);
+            return CreatedAtAction(nameof(Get), new { idOrSlug = good.Id }, good);
         }
 
-        [HttpGet(ApiEndpoints.Goods.Get)]
+        [HttpGet(ApiEndpoints.Products.Get)]
         public async Task<IActionResult> Get([FromRoute] string idOrSlug)
         {
-            var good = Guid.TryParse(idOrSlug, out var id) 
+            var good = Guid.TryParse(idOrSlug, out var id)
                 ? await _goodRepository.GetByIdAsync(id)
                 : await _goodRepository.GetBySlugAsync(idOrSlug);
-
 
             if (good == null)
             {
@@ -43,8 +42,7 @@ namespace ModelStore.API.Controllers
             return Ok(response);
         }
 
-
-        [HttpGet(ApiEndpoints.Goods.GetAll)]
+        [HttpGet(ApiEndpoints.Products.GetAll)]
         public async Task<IActionResult> GetAll()
         {
             var goods = await _goodRepository.GetAllAsync();
@@ -53,12 +51,12 @@ namespace ModelStore.API.Controllers
             return Ok(goodsResponse);
         }
 
-        [HttpPut(ApiEndpoints.Goods.Update)]
+        [HttpPut(ApiEndpoints.Products.Update)]
         public async Task<IActionResult> Update([FromRoute] Guid id,
-            [FromBody]UpdateGoodRequest request)
+            [FromBody] UpdateProductRequest request)
         {
             var good = request.MapToGood(id);
-            var updated = await _goodRepository.UpdateGoodAsync(good);
+            var updated = await _goodRepository.UpdateProductAsync(good);
             if (!updated)
             {
                 return NotFound();
@@ -67,10 +65,10 @@ namespace ModelStore.API.Controllers
             return Ok(updated);
         }
 
-        [HttpDelete(ApiEndpoints.Goods.Delete)]
+        [HttpDelete(ApiEndpoints.Products.Delete)]
         public async Task<IActionResult> Delete([FromRoute] Guid id)
         {
-            var deleted = await _goodRepository.DeleteGoodAsync(id);
+            var deleted = await _goodRepository.DeleteProductAsync(id);
             if (!deleted)
             {
                 return NotFound();

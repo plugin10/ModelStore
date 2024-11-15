@@ -6,48 +6,51 @@ namespace ModelStore.API.Mapping
 {
     public static class ContractMapping
     {
-        public static Good MapToGood(this CreateGoodRequest request)
+        public static Product MapToGood(this CreateProductRequest request)
         {
-            return new Good
+            return new Product
             {
                 Id = Guid.NewGuid(),
                 Name = request.Name,
                 Brand = request.Brand,
                 Ammount = request.Ammount,
+                Categories = request.Categories.ToList(),
                 Description = request.Description,
             };
         }
 
-        public static Good MapToGood(this UpdateGoodRequest request, Guid id)
+        public static Product MapToGood(this UpdateProductRequest request, Guid id)
         {
-            return new Good
+            return new Product
             {
                 Id = id,
                 Name = request.Name,
                 Brand = request.Brand,
                 Ammount = request.Ammount,
+                Categories = request.Categories.ToList(),
                 Description = request.Description,
             };
         }
 
-        public static GoodResponse MapToResponse(this Good good) 
+        public static ProductResponse MapToResponse(this Product product)
         {
-            return new GoodResponse 
+            return new ProductResponse
             {
-                Id = good.Id,
-                Name = good.Name,
-                Brand = good.Brand,
-                Slug = good.Slug,
-                Ammount = good.Ammount,
-                Description = good.Description 
+                Id = product.Id,
+                Name = product.Name,
+                Brand = product.Brand,
+                Slug = product.Slug,
+                Ammount = product.Ammount,
+                Categories = product.Categories,
+                Description = product.Description
             };
         }
 
-        public static GoodsResponse MapToResponse(this IEnumerable<Good> goods)
+        public static ProductsResponse MapToResponse(this IEnumerable<Product> products)
         {
-            return new GoodsResponse
+            return new ProductsResponse
             {
-                Items = goods.Select(MapToResponse),
+                Items = products.Select(MapToResponse),
             };
         }
     }

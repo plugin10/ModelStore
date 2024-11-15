@@ -21,8 +21,8 @@ namespace ModelStore.Application.Database
             using var connection = await _dbConnectionFactory.CreateConnectionAsync();
 
             await connection.ExecuteAsync(@"
-                IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='goods' AND xtype='U')
-                CREATE TABLE goods (
+                IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='products' AND xtype='U')
+                CREATE TABLE products (
                     id UNIQUEIDENTIFIER PRIMARY KEY,
                     slug NVARCHAR(255) NOT NULL,
                     name NVARCHAR(255) NOT NULL,
@@ -33,9 +33,19 @@ namespace ModelStore.Application.Database
             ");
 
             await connection.ExecuteAsync(@"
-                IF NOT EXISTS (SELECT * FROM sys.indexes WHERE name = 'goods_slug_idx')
-                CREATE UNIQUE INDEX goods_slug_idx
-                ON goods (slug);
+                IF NOT EXISTS (SELECT * FROM sys.indexes WHERE name = 'products_slug_idx')
+                CREATE UNIQUE INDEX products_slug_idx
+                ON products (slug);
+            ");
+
+            await connection.ExecuteAsync(@"
+                IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='categories' AND xtype='U')
+                CREATE TABLE categories (
+                    id INT IDENTITY(1,1) PRIMARY KEY,
+                    productId UNIQUEIDENTIFIER NOT NULL,
+                    name NVARCHAR(255) NOT NULL,
+                    CONSTRAINT FK_Categories_Products FOREIGN KEY (productId) REFERENCES products(id)
+                );
             ");
         }
     }

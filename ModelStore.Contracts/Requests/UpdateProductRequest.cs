@@ -6,13 +6,15 @@ using System.Threading.Tasks;
 
 namespace ModelStore.Contracts.Requests
 {
-    public class UpdateGoodRequest
+    public class UpdateProductRequest
     {
         public required string Name { get; init; }
 
         public required string Brand { get; set; }
 
         public int Ammount { get; init; } = 0;
+
+        public IEnumerable<string> Categories { get; init; } = Enumerable.Empty<string>();
 
         public string Description { get; init; } = string.Empty;
     }

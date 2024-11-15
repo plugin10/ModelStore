@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace ModelStore.Contracts.Responses
 {
-    public class GoodsResponse
+    public class ProductsResponse
     {
-        public required IEnumerable<GoodResponse> Items { get; init; } = Enumerable.Empty<GoodResponse>();
+        public IEnumerable<ProductResponse> Items { get; init; } = Enumerable.Empty<ProductResponse>();
     }
 }
