@@ -33,14 +33,14 @@ namespace ModelStore.Application.Repositories
 
             if (result > 0)
             {
-                //foreach (var category in product.Categories)
-                //{
-                //    await connection.ExecuteAsync(new CommandDefinition("""
-                //        INSERT INTO categories (productId, name)
-                //        VALUES (@ProductId, @Name);
-                //        """, new { ProductId = product.Id, Name = category },
-                //        transaction: transaction));
-                //}
+                foreach (var category in product.Categories)
+                {
+                    await connection.ExecuteAsync(new CommandDefinition("""
+                        INSERT INTO categories (productId, name)
+                        VALUES (@ProductId, @Name);
+                        """, new { ProductId = product.Id, Name = category },
+                        transaction: transaction));
+                }
             }
             transaction.Commit();
 
@@ -63,8 +63,18 @@ namespace ModelStore.Application.Repositories
                 return null;
             }
 
-            // TO DO
-            // add categorie collection from table
+            var categories = await connection.QueryAsync<string>
+                (
+                    new CommandDefinition
+                    ("""
+                        SELECT * FROM categories WHERE productId = @id
+                    """, new { id })
+                );
+
+            foreach (var category in categories)
+            {
+                product.Categories.Add (category);
+            }
 
             return product;
         }
@@ -85,18 +95,46 @@ namespace ModelStore.Application.Repositories
                 return null;
             }
 
-            // TO DO
-            // add categorie collection from table
+            var categories = await connection.QueryAsync<string>
+                (
+                    new CommandDefinition
+                    ("""
+                        SELECT * FROM categories WHERE productId = @id
+                    """, new { id = product.Id })
+                );
+
+            foreach (var category in categories)
+            {
+                product.Categories.Add(category);
+            }
 
             return product;
         }
 
-        public Task<IEnumerable<Product>> GetAllAsync()
+        public async Task<IEnumerable<Product>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            using var connection = await _DBconnectionFactory.CreateConnectionAsync();
 
-            // TO DO
-            // add get all products
+            var result = await connection.QueryAsync
+                (
+                    new CommandDefinition
+                    ("""
+                        SELECT p.*, STRING_AGG(c.name, ',') AS categories
+                        FROM products p
+                        LEFT JOIN categories c ON p.id = c.productId
+                        GROUP BY p.id, p.name, p.brand, p.slug, p.amount, p.description
+                    """)
+                );
+
+            return result.Select(p => new Product
+            {
+                Id = p.Id,
+                Name = p.Name,
+                Brand = p.Brand,
+                Categories = Enumerable.ToList(p.categories.Split(',')),
+                Description = p.Description,
+            });
+
         }
 
         public Task<bool> UpdateProductAsync(Product product)
