@@ -1,0 +1,22 @@
+<ng-container *ngIf="isLoggedIn() && isNotLoginPage(); else notLoggedIn">
+    <div class="flex flex-column min-h-full">
+      <header>
+        <app-header></app-header>
+      </header>
+      <main class="flex-1">
+        <div class="grid m-0">
+          <div class="col-12 mt-4 px-2 xl:px-6">
+            <router-outlet></router-outlet>
+          </div>
+        </div>
+      </main>
+      <footer>
+        <app-footer></app-footer>   
+      </footer>
+    </div>
+  </ng-container>
+  <ng-template #notLoggedIn>
+    <router-outlet></router-outlet>
+  </ng-template>
+
+  <p-toast position="bottom-left" key="toast"></p-toast>

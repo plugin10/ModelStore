@@ -1,0 +1,99 @@
+<form [formGroup]="productForm" (ngSubmit)="submit()">
+  <div class="flex flex-column gap-5 mt-5">
+    <!-- Nazwa produktu -->
+    <p-floatLabel class="w-full">
+      <input
+        class="w-full"
+        id="name"
+        type="text"
+        pInputText
+        formControlName="name"
+        aria-label="Nazwa produktu"
+      />
+      <label for="name">Nazwa produktu</label>
+    </p-floatLabel>
+
+    <!-- Opis -->
+    <p-floatLabel class="w-full">
+      <textarea
+        class="w-full"
+        id="description"
+        pInputTextarea
+        formControlName="description"
+        rows="3"
+      ></textarea>
+      <label for="description">Opis produktu</label>
+    </p-floatLabel>
+
+    <!-- Cena -->
+    <p-floatLabel class="w-full">
+      <input
+        class="w-full"
+        id="price"
+        type="number"
+        pInputText
+        formControlName="price"
+      />
+      <label for="price">Cena (PLN)</label>
+    </p-floatLabel>
+
+    <!-- Kategoria -->
+    <p-floatLabel class="w-full">
+      <p-dropdown
+        class="w-full"
+        [options]="categoriesToDropdown"
+        optionValue="code"
+        formControlName="categoryId"
+        optionLabel="name"
+        styleClass="w-full"
+      ></p-dropdown>
+      <label for="price">Kategoria</label>
+    </p-floatLabel>
+
+    <!-- Dostępność -->
+    <p-floatLabel class="w-full">
+      <input
+        class="w-full"
+        id="stock"
+        type="number"
+        pInputText
+        formControlName="stock"
+        aria-label="Dostępność"
+      />
+      <label for="stock">Dostępność (ilość)</label>
+    </p-floatLabel>
+
+    <!-- URL obrazka -->
+    <p-floatLabel class="w-full">
+      <input
+        class="w-full"
+        id="imageUrl"
+        type="url"
+        pInputText
+        formControlName="imageUrl"
+        aria-label="Adres URL obrazka"
+      />
+      <label for="imageUrl">Adres URL obrazka</label>
+    </p-floatLabel>
+
+    <!-- Producent -->
+    <p-floatLabel class="w-full">
+      <input
+        class="w-full"
+        id="manufacturer"
+        type="text"
+        pInputText
+        formControlName="manufacturer"
+        aria-label="Producent"
+      />
+      <label for="manufacturer">Producent</label>
+    </p-floatLabel>
+  </div>
+  <p-button
+    class="mt-4"
+    styleClass="mt-4"
+    type="submit"
+    label="Zapisz"
+    severity="secondary"
+  ></p-button>
+</form>

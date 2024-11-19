@@ -1,0 +1,41 @@
+/* Tło całej tabeli */
+p-table {
+  background-color: #2d2d2f !important;
+  color: #f29f05 !important; /* Tekst */
+}
+
+/* Styl nagłówków */
+p-table thead th {
+  background-color: #4b5563 !important; /* Tło nagłówków */
+  color: #f29f05 !important; /* Tekst nagłówków */
+  border-bottom: 1px solid #3b3b3d !important; /* Obramowanie nagłówków */
+  text-align: center;
+}
+
+/* Styl wierszy */
+p-table tbody tr {
+  background-color: #2d2d2f !important; /* Tło wierszy */
+  border-bottom: 1px solid #3b3b3d !important; /* Obramowanie wierszy */
+  color: #f29f05 !important; /* Tekst */
+}
+
+/* Hover na wierszach */
+p-table tbody tr:hover {
+  background-color: #38383b !important; /* Tło hover */
+  color: #f29f05 !important; /* Tekst hover */
+}
+
+/* Checkboxy */
+p-tableCheckbox .p-checkbox-box {
+  background-color: #4b5563 !important;
+  border-color: #3b3b3d !important;
+}
+
+p-tableCheckbox .p-checkbox-box:hover {
+  background-color: #38383b !important;
+}
+
+/* Obramowanie */
+p-table .p-datatable-gridlines .p-datatable-tbody > tr > td {
+  border-color: #3b3b3d !important; /* Obramowanie komórek */
+}

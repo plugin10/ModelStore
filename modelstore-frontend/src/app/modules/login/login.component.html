@@ -1,0 +1,20 @@
+<form class="flex flex-column gap-5 align-items-end w-full p-5" (ngSubmit)="onSubmit()" [formGroup]="loginForm">
+    <span class="p-float-label w-full">
+        <input class="w-full" type="text" id="username" pInputText formControlName="login" autocomplete="off"/>
+        <label for="username">Login</label>
+    </span>
+    <span class="p-float-label w-full">
+        <input
+            [style]="{'width':'100%'}"
+            formControlName="password"
+            id="password"
+            name="password"
+            pInputText
+            required="true"
+            [type]="togglePassword ? 'text' : 'password'"
+        />
+        <label for="password">Hasło</label>
+        <i [class]="'pi pi-eye' + (togglePassword ? '-slash' : '') + ' toggle-password'" (click)="togglePassword = !togglePassword"></i>
+    </span>
+    <p-button type="submit" label="Zaloguj" severity="secondary" [loading]="blockedlogged"></p-button>
+</form>
