@@ -128,11 +128,12 @@ namespace ModelStore.Application.Repositories
 
             return result.Select(p => new Product
             {
-                Id = p.Id,
-                Name = p.Name,
-                Brand = p.Brand,
+                Id = p.id,
+                Name = p.name,
+                Brand = p.brand,
+                Ammount = p.amount,
                 Categories = Enumerable.ToList(p.categories.Split(',')),
-                Description = p.Description,
+                Description = p.description,
             });
 
         }
