@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Category } from '../../shared/interfaces/category';
 import { Product } from '../../shared/interfaces/product';
 import { ImageModule } from 'primeng/image';
@@ -8,7 +8,11 @@ import { ButtonModule } from 'primeng/button';
 import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { ProductFormComponent } from './product-form/product-form.component';
+import { DataViewModule } from 'primeng/dataview';
 import { Guid } from 'guid-typescript';
+import { TagModule } from 'primeng/tag';
+import { CommonModule } from '@angular/common';
+import { RatingModule } from 'primeng/rating';
 
 @Component({
   selector: 'app-products',
@@ -21,6 +25,10 @@ import { Guid } from 'guid-typescript';
     ButtonModule,
     FormsModule,
     ReactiveFormsModule,
+    DataViewModule,
+    TagModule,
+    CommonModule,
+    RatingModule,
   ],
   templateUrl: './products.component.html',
   styleUrls: ['./products.component.scss'],
@@ -58,6 +66,7 @@ export class ProductsComponent {
       description: 'Figurka elfa łucznika o szczegółowym wykończeniu.',
       price: 49.99,
       categoryId: 1,
+      rating: 4.6,
       stock: 15,
       imageUrl: '../../../assets/images/figurka.jpg',
       scale: '1:32',
@@ -69,6 +78,7 @@ export class ProductsComponent {
       description: 'Figurka rycerza templariusza z epoki krucjat.',
       price: 79.99,
       categoryId: 2,
+      rating: 4.0,
       stock: 10,
       imageUrl: '../../../assets/images/figurka.jpg',
       scale: '1:35',
@@ -80,6 +90,7 @@ export class ProductsComponent {
       description: 'Zestaw 12 kolorów farb akrylowych dla modelarzy.',
       price: 25.99,
       categoryId: 3,
+      rating: 5,
       stock: 25,
       imageUrl: '../../../assets/images/figurka.jpg',
       scale: 'N/A',
@@ -111,22 +122,14 @@ export class ProductsComponent {
 
     this.ref.onClose.subscribe((product: Product) => {
       if (product) {
-        // Sprawdź, czy produkt istnieje na liście
         const index = this.products.findIndex((p) => p.id.equals(product.id));
 
-        console.log(index);
-
         if (index !== -1) {
-          // Jeśli istnieje, podmień
-          console.log('działa');
           this.products[index] = product;
           this.products = [...this.products];
         } else {
-          // Jeśli nie istnieje, dodaj
           this.products = [...this.products, product];
         }
-
-        console.log(this.products);
       }
     });
   }
