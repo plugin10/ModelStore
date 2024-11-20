@@ -6,6 +6,7 @@ export interface Product {
   description: string;
   price: number;
   categoryId: number;
+  rating: number;
   stock: number;
   imageUrl: string;
   scale: string; // Skala modelu, np. "1:72"
