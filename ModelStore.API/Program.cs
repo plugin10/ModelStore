@@ -14,6 +14,15 @@ namespace ModelStore.API
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowSpecificOrigins", policy =>
+                {
+                    policy.WithOrigins("http://localhost:4200")
+                          .AllowAnyHeader()
+                          .AllowAnyMethod();
+                });
+            });
 
             builder.Services.AddApplication();
             builder.Services.AddDatabase(config["Database:ConnectionString"]!);
@@ -30,6 +39,7 @@ namespace ModelStore.API
             app.UseHttpsRedirection();
             app.UseAuthorization();
             app.MapControllers();
+            app.UseCors("AllowSpecificOrigins");
 
             var dbInitializer = app.Services.GetRequiredService<DbInitializer>();
             await dbInitializer.InitializerAsync();
