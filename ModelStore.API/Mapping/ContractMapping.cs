@@ -13,7 +13,8 @@ namespace ModelStore.API.Mapping
                 Id = Guid.NewGuid(),
                 Name = request.Name,
                 Brand = request.Brand,
-                Ammount = request.Ammount,
+                Price = request.Price,
+                Stock = request.Stock,
                 Categories = request.Categories.ToList(),
                 Description = request.Description,
             };
@@ -26,7 +27,8 @@ namespace ModelStore.API.Mapping
                 Id = id,
                 Name = request.Name,
                 Brand = request.Brand,
-                Ammount = request.Ammount,
+                Price = request.Price,
+                Stock = request.Stock,
                 Categories = request.Categories.ToList(),
                 Description = request.Description,
             };
@@ -40,7 +42,8 @@ namespace ModelStore.API.Mapping
                 Name = product.Name,
                 Brand = product.Brand,
                 Slug = product.Slug,
-                Ammount = product.Ammount,
+                Price = product.Price,
+                Stock = product.Stock,
                 Categories = product.Categories,
                 Description = product.Description
             };

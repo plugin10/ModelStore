@@ -16,7 +16,9 @@ namespace ModelStore.Contracts.Responses
 
         public required string Slug { get; set; }
 
-        public int Ammount { get; init; } = 0;
+        public decimal Price { get; set; }
+
+        public int Stock { get; init; } = 0;
 
         public IEnumerable<string> Categories { get; init; } = Enumerable.Empty<string>();
 

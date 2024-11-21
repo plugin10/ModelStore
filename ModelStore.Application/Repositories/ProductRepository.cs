@@ -25,8 +25,8 @@ namespace ModelStore.Application.Repositories
 
             var result = await connection.ExecuteAsync(new CommandDefinition
                 ("""
-                    INSERT INTO products (id, name, brand, slug, amount, description)
-                    VALUES (@Id, @Name, @Brand, @Slug, @Ammount, @Description);
+                    INSERT INTO product (id, name, brand, slug, price, stock, description)
+                    VALUES (@Id, @Name, @Brand, @Slug, @Price, @Stock, @Description);
                     """, product,
                     transaction: transaction)
                 );
@@ -36,7 +36,7 @@ namespace ModelStore.Application.Repositories
                 foreach (var category in product.Categories)
                 {
                     await connection.ExecuteAsync(new CommandDefinition("""
-                        INSERT INTO categories (productId, name)
+                        INSERT INTO categorie (product_id, name)
                         VALUES (@ProductId, @Name);
                         """, new { ProductId = product.Id, Name = category },
                         transaction: transaction));
@@ -54,7 +54,7 @@ namespace ModelStore.Application.Repositories
                 (
                     new CommandDefinition
                     ("""
-                        SELECT * FROM products WHERE id = @id
+                        SELECT * FROM product WHERE id = @id
                     """, new { id })
                 );
 
@@ -67,7 +67,7 @@ namespace ModelStore.Application.Repositories
                 (
                     new CommandDefinition
                     ("""
-                        SELECT * FROM categories WHERE productId = @id
+                        SELECT * FROM categorie WHERE product_id = @id
                     """, new { id })
                 );
 
@@ -86,7 +86,7 @@ namespace ModelStore.Application.Repositories
                 (
                     new CommandDefinition
                     ("""
-                        SELECT * FROM products WHERE slug = @slug
+                        SELECT * FROM product WHERE slug = @slug
                     """, new { slug })
                 );
 
@@ -99,7 +99,7 @@ namespace ModelStore.Application.Repositories
                 (
                     new CommandDefinition
                     ("""
-                        SELECT * FROM categories WHERE productId = @id
+                        SELECT * FROM categorie WHERE product_id = @id
                     """, new { id = product.Id })
                 );
 
@@ -119,10 +119,13 @@ namespace ModelStore.Application.Repositories
                 (
                     new CommandDefinition
                     ("""
-                        SELECT p.*, STRING_AGG(c.name, ',') AS categories
-                        FROM products p
-                        LEFT JOIN categories c ON p.id = c.productId
-                        GROUP BY p.id, p.name, p.brand, p.slug, p.amount, p.description
+                        SELECT p.*, 
+                        STRING_AGG(c.name, ',') AS categories, 
+                        AVG(CAST(r.rating AS FLOAT)) AS ratings
+                        FROM product p
+                        LEFT JOIN categorie c ON p.id = c.product_id
+                        LEFT JOIN rating r ON p.id = r.product_id
+                        GROUP BY p.id, p.name, p.brand, p.slug, p.price, p.stock, p.description
                     """)
                 );
 
@@ -131,7 +134,8 @@ namespace ModelStore.Application.Repositories
                 Id = p.id,
                 Name = p.name,
                 Brand = p.brand,
-                Ammount = p.amount,
+                Price = p.price,
+                Stock = p.stock,
                 Categories = Enumerable.ToList(p.categories.Split(',')),
                 Description = p.description,
             });

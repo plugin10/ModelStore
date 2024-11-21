@@ -17,7 +17,9 @@ namespace ModelStore.Application.Models
 
         public string Slug => GenetateSlug();
 
-        public int Ammount { get; set; }
+        public decimal Price { get; set; }
+
+        public int Stock { get; set; }
 
         public List<string> Categories { get; init; } = new();
 
