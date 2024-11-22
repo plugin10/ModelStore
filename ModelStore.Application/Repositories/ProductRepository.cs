@@ -164,14 +164,77 @@ namespace ModelStore.Application.Repositories
 
         }
 
-        public Task<bool> UpdateProductAsync(Product product)
+        public async Task<bool> UpdateProductAsync(Product product)
         {
-            throw new NotImplementedException();
+            using var connection = await _DBconnectionFactory.CreateConnectionAsync();
+            using var transaction = connection.BeginTransaction();
+
+            await connection.ExecuteAsync
+                (new CommandDefinition
+                    ("""
+                        DELETE FROM categorie WHERE product_id = @id
+                    """, new { id = product.Id },
+                    transaction: transaction)
+                );
+
+            foreach (var category in product.Categories)
+            {
+                await connection.ExecuteAsync(
+                    new CommandDefinition("""
+                        INSERT INTO categorie (product_id, name)
+                        VALUES (@ProductId, @Name);
+                        """, new { ProductId = product.Id, Name = category },
+                    transaction: transaction)
+                    );
+            }
+
+            var result = await connection.ExecuteAsync(
+                new CommandDefinition("""
+                        UPDATE product SET 
+                        slug = @Slug, 
+                        name = @Name, 
+                        brand = @Brand, 
+                        price = @Price, 
+                        stock = @Stock, 
+                        description = @Description
+                        WHERE id = @Id;
+                        """, product,
+                    transaction: transaction)
+                );
+
+            transaction.Commit();
+            return result > 0;
         }
 
-        public Task<bool> DeleteProductAsync(Guid id)
+        public async Task<bool> DeleteProductAsync(Guid id)
         {
-            throw new NotImplementedException();
+            using var connection = await _DBconnectionFactory.CreateConnectionAsync();
+            using var transaction = connection.BeginTransaction();
+
+            await connection.ExecuteAsync
+                (new CommandDefinition
+                    ("""
+                        DELETE FROM categorie WHERE product_id = @id
+                    """, new { id },
+                    transaction: transaction)
+                );
+
+            await connection.ExecuteAsync(new CommandDefinition
+                    ("""
+                        DELETE FROM rating WHERE product_id = @id
+                    """, new { id },
+                    transaction: transaction)
+                );
+
+            var result = await connection.ExecuteAsync(new CommandDefinition
+                    ("""
+                        DELETE FROM product WHERE id = @id
+                    """, new { id },
+                    transaction: transaction)
+                );
+
+            transaction.Commit();
+            return result > 0;
         }
 
         public async Task<bool> ExistsProductAsync(Guid id)
