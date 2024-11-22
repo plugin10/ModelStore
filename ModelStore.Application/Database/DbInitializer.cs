@@ -71,7 +71,7 @@ namespace ModelStore.Application.Database
                         rating_id INT PRIMARY KEY IDENTITY(1,1),
                         user_id INT NOT NULL,
                         product_id UNIQUEIDENTIFIER NOT NULL,
-                        rating INT CHECK (Rating BETWEEN 1 AND 5),
+                        rating_score INT CHECK (rating_score BETWEEN 1 AND 5),
                         created_at DATETIME DEFAULT GETDATE(),
                         FOREIGN KEY (user_id) REFERENCES [user](id),
                         FOREIGN KEY (product_id) REFERENCES product(id)

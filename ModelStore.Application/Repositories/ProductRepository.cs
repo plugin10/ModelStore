@@ -73,8 +73,19 @@ namespace ModelStore.Application.Repositories
 
             foreach (var category in categories)
             {
-                product.Categories.Add (category);
+                product.Categories.Add(category);
             }
+
+            var rating = await connection.QuerySingleOrDefaultAsync<float>
+                (
+                    new CommandDefinition
+                    ("""
+                        SELECT AVG(CAST(rating_score AS FLOAT)) FROM rating WHERE product_id = @id
+                    """, new { id })
+                );
+
+            product.Rating = rating;
+            
 
             return product;
         }
@@ -108,6 +119,16 @@ namespace ModelStore.Application.Repositories
                 product.Categories.Add(category);
             }
 
+            var rating = await connection.QuerySingleOrDefaultAsync<float>
+                (
+                    new CommandDefinition
+                    ("""
+                        SELECT AVG(CAST(rating_score AS FLOAT)) FROM rating WHERE product_id = @id
+                    """, new { id = product.Id })
+                );
+
+            product.Rating = rating;
+
             return product;
         }
 
@@ -121,7 +142,7 @@ namespace ModelStore.Application.Repositories
                     ("""
                         SELECT p.*, 
                         STRING_AGG(c.name, ',') AS categories, 
-                        AVG(CAST(r.rating AS FLOAT)) AS ratings
+                        AVG(CAST(r.rating_score AS FLOAT)) AS rating_score
                         FROM product p
                         LEFT JOIN categorie c ON p.id = c.product_id
                         LEFT JOIN rating r ON p.id = r.product_id
@@ -134,6 +155,7 @@ namespace ModelStore.Application.Repositories
                 Id = p.id,
                 Name = p.name,
                 Brand = p.brand,
+                Rating = (float?)p.rating_score,
                 Price = p.price,
                 Stock = p.stock,
                 Categories = Enumerable.ToList(p.categories.Split(',')),

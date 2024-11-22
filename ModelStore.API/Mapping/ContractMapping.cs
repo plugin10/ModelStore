@@ -42,6 +42,7 @@ namespace ModelStore.API.Mapping
                 Name = product.Name,
                 Brand = product.Brand,
                 Slug = product.Slug,
+                Rating = product.Rating,
                 Price = product.Price,
                 Stock = product.Stock,
                 Categories = product.Categories,

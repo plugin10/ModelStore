@@ -16,6 +16,8 @@ namespace ModelStore.Contracts.Responses
 
         public required string Slug { get; set; }
 
+        public float? Rating { get; set; }
+
         public decimal Price { get; set; }
 
         public int Stock { get; init; } = 0;
