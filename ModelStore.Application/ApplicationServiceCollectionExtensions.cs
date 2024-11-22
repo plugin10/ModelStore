@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using FluentValidation;
+using Microsoft.Extensions.DependencyInjection;
 using ModelStore.Application.Database;
 using ModelStore.Application.Repositories;
 using ModelStore.Application.Services;
@@ -12,17 +13,18 @@ namespace ModelStore.Application
 {
     public static class ApplicationServiceCollectionExtensions
     {
-        public static IServiceCollection AddApplication(this IServiceCollection services) 
+        public static IServiceCollection AddApplication(this IServiceCollection services)
         {
             services.AddSingleton<IProductRepository, ProductRepository>();
             services.AddSingleton<IProductService, ProductService>();
+            services.AddValidatorsFromAssemblyContaining<IApplicationMarker>(ServiceLifetime.Singleton);
             return services;
         }
 
         public static IServiceCollection AddDatabase(this IServiceCollection services,
             string connectionString)
         {
-            services.AddSingleton<IDbConnectionFactory>(_ => 
+            services.AddSingleton<IDbConnectionFactory>(_ =>
                 new SqlConnectionFactory(connectionString));
             services.AddSingleton<DbInitializer>();
             return services;

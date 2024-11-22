@@ -1,3 +1,4 @@
+using ModelStore.API.Mapping;
 using ModelStore.Application;
 using ModelStore.Application.Database;
 
@@ -38,6 +39,7 @@ namespace ModelStore.API
 
             app.UseHttpsRedirection();
             app.UseAuthorization();
+            app.UseMiddleware<ValidationMappingMiddleware>();
             app.MapControllers();
             app.UseCors("AllowSpecificOrigins");
 
@@ -47,5 +49,4 @@ namespace ModelStore.API
             app.Run();
         }
     }
-
 }

@@ -1,4 +1,5 @@
-﻿using ModelStore.Application.Models;
+﻿using FluentValidation;
+using ModelStore.Application.Models;
 using ModelStore.Application.Repositories;
 using System;
 using System.Collections.Generic;
@@ -11,15 +12,18 @@ namespace ModelStore.Application.Services
     public class ProductService : IProductService
     {
         private readonly IProductRepository _productRepository;
+        private readonly IValidator<Product> _productValidator;
 
-        public ProductService(IProductRepository productRepository)
+        public ProductService(IProductRepository productRepository, IValidator<Product> productValidator)
         {
             _productRepository = productRepository;
+            _productValidator = productValidator;
         }
 
-        public Task<bool> CreateAsync(Product product)
+        public async Task<bool> CreateAsync(Product product)
         {
-            return _productRepository.CreateAsync(product);
+            await _productValidator.ValidateAndThrowAsync(product);
+            return await _productRepository.CreateAsync(product);
         }
 
         public Task<IEnumerable<Product>> GetAllAsync()
@@ -39,6 +43,7 @@ namespace ModelStore.Application.Services
 
         public async Task<Product?> UpdateProductAsync(Product product)
         {
+            await _productValidator.ValidateAndThrowAsync(product);
             var productExist = await _productRepository.ExistsProductAsync(product.Id);
 
             if (!productExist)
