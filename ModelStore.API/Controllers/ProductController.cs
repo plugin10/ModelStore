@@ -2,6 +2,7 @@
 using ModelStore.API.Mapping;
 using ModelStore.Application.Models;
 using ModelStore.Application.Repositories;
+using ModelStore.Application.Services;
 using ModelStore.Contracts.Requests;
 
 namespace ModelStore.API.Controllers
@@ -9,11 +10,11 @@ namespace ModelStore.API.Controllers
     [ApiController]
     public class ProductController : ControllerBase
     {
-        private readonly IProductRepository _productRepository;
+        private readonly IProductService _productService;
 
-        public ProductController(IProductRepository goodRepository)
+        public ProductController(IProductService productService)
         {
-            _productRepository = goodRepository;
+            _productService = productService;
         }
 
         [HttpPost(ApiEndpoints.Products.Create)]
@@ -21,7 +22,7 @@ namespace ModelStore.API.Controllers
         {
             var product = request.MapToGood();
 
-            await _productRepository.CreateAsync(product);
+            await _productService.CreateAsync(product);
 
             return CreatedAtAction(nameof(Get), new { idOrSlug = product.Id }, product);
         }
@@ -30,8 +31,8 @@ namespace ModelStore.API.Controllers
         public async Task<IActionResult> Get([FromRoute] string idOrSlug)
         {
             var product = Guid.TryParse(idOrSlug, out var id)
-                ? await _productRepository.GetByIdAsync(id)
-                : await _productRepository.GetBySlugAsync(idOrSlug);
+                ? await _productService.GetByIdAsync(id)
+                : await _productService.GetBySlugAsync(idOrSlug);
 
             if (product == null)
             {
@@ -45,7 +46,7 @@ namespace ModelStore.API.Controllers
         [HttpGet(ApiEndpoints.Products.GetAll)]
         public async Task<IActionResult> GetAll()
         {
-            var products = await _productRepository.GetAllAsync();
+            var products = await _productService.GetAllAsync();
 
             var productsResponse = products.MapToResponse();
             return Ok(productsResponse);
@@ -56,19 +57,19 @@ namespace ModelStore.API.Controllers
             [FromBody] UpdateProductRequest request)
         {
             var product = request.MapToGood(id);
-            var updated = await _productRepository.UpdateProductAsync(product);
-            if (!updated)
+            var updatedProduct = await _productService.UpdateProductAsync(product);
+            if (updatedProduct == null)
             {
                 return NotFound();
             }
 
-            return Ok(updated);
+            return Ok(updatedProduct);
         }
 
         [HttpDelete(ApiEndpoints.Products.Delete)]
         public async Task<IActionResult> Delete([FromRoute] Guid id)
         {
-            var deleted = await _productRepository.DeleteProductAsync(id);
+            var deleted = await _productService.DeleteProductAsync(id);
             if (!deleted)
             {
                 return NotFound();

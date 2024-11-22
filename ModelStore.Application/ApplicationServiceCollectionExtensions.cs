@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using ModelStore.Application.Database;
 using ModelStore.Application.Repositories;
+using ModelStore.Application.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +15,7 @@ namespace ModelStore.Application
         public static IServiceCollection AddApplication(this IServiceCollection services) 
         {
             services.AddSingleton<IProductRepository, ProductRepository>();
+            services.AddSingleton<IProductService, ProductService>();
             return services;
         }
 
