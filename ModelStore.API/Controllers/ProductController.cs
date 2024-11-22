@@ -18,21 +18,21 @@ namespace ModelStore.API.Controllers
         }
 
         [HttpPost(ApiEndpoints.Products.Create)]
-        public async Task<IActionResult> Create([FromBody] CreateProductRequest request)
+        public async Task<IActionResult> Create([FromBody] CreateProductRequest request, CancellationToken token)
         {
             var product = request.MapToGood();
 
-            await _productService.CreateAsync(product);
+            await _productService.CreateAsync(product, token);
 
             return CreatedAtAction(nameof(Get), new { idOrSlug = product.Id }, product);
         }
 
         [HttpGet(ApiEndpoints.Products.Get)]
-        public async Task<IActionResult> Get([FromRoute] string idOrSlug)
+        public async Task<IActionResult> Get([FromRoute] string idOrSlug, CancellationToken token)
         {
             var product = Guid.TryParse(idOrSlug, out var id)
-                ? await _productService.GetByIdAsync(id)
-                : await _productService.GetBySlugAsync(idOrSlug);
+                ? await _productService.GetByIdAsync(id, token)
+                : await _productService.GetBySlugAsync(idOrSlug, token);
 
             if (product == null)
             {
@@ -44,9 +44,9 @@ namespace ModelStore.API.Controllers
         }
 
         [HttpGet(ApiEndpoints.Products.GetAll)]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll(CancellationToken token)
         {
-            var products = await _productService.GetAllAsync();
+            var products = await _productService.GetAllAsync(token);
 
             var productsResponse = products.MapToResponse();
             return Ok(productsResponse);
@@ -54,10 +54,10 @@ namespace ModelStore.API.Controllers
 
         [HttpPut(ApiEndpoints.Products.Update)]
         public async Task<IActionResult> Update([FromRoute] Guid id,
-            [FromBody] UpdateProductRequest request)
+            [FromBody] UpdateProductRequest request, CancellationToken token)
         {
             var product = request.MapToGood(id);
-            var updatedProduct = await _productService.UpdateProductAsync(product);
+            var updatedProduct = await _productService.UpdateProductAsync(product, token);
             if (updatedProduct == null)
             {
                 return NotFound();
@@ -67,9 +67,9 @@ namespace ModelStore.API.Controllers
         }
 
         [HttpDelete(ApiEndpoints.Products.Delete)]
-        public async Task<IActionResult> Delete([FromRoute] Guid id)
+        public async Task<IActionResult> Delete([FromRoute] Guid id, CancellationToken token)
         {
-            var deleted = await _productService.DeleteProductAsync(id);
+            var deleted = await _productService.DeleteProductAsync(id, token);
             if (!deleted)
             {
                 return NotFound();

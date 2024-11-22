@@ -20,44 +20,44 @@ namespace ModelStore.Application.Services
             _productValidator = productValidator;
         }
 
-        public async Task<bool> CreateAsync(Product product)
+        public async Task<bool> CreateAsync(Product product, CancellationToken token = default)
         {
-            await _productValidator.ValidateAndThrowAsync(product);
-            return await _productRepository.CreateAsync(product);
+            await _productValidator.ValidateAndThrowAsync(product, cancellationToken: token);
+            return await _productRepository.CreateAsync(product, token);
         }
 
-        public Task<IEnumerable<Product>> GetAllAsync()
+        public Task<IEnumerable<Product>> GetAllAsync(CancellationToken token = default)
         {
-            return _productRepository.GetAllAsync();
+            return _productRepository.GetAllAsync(token);
         }
 
-        public Task<Product?> GetByIdAsync(Guid id)
+        public Task<Product?> GetByIdAsync(Guid id, CancellationToken token = default)
         {
-            return _productRepository.GetByIdAsync(id);
+            return _productRepository.GetByIdAsync(id, token);
         }
 
-        public Task<Product?> GetBySlugAsync(string slug)
+        public Task<Product?> GetBySlugAsync(string slug, CancellationToken token = default)
         {
-            return _productRepository.GetBySlugAsync(slug);
+            return _productRepository.GetBySlugAsync(slug, token);
         }
 
-        public async Task<Product?> UpdateProductAsync(Product product)
+        public async Task<Product?> UpdateProductAsync(Product product, CancellationToken token = default)
         {
-            await _productValidator.ValidateAndThrowAsync(product);
-            var productExist = await _productRepository.ExistsProductAsync(product.Id);
+            await _productValidator.ValidateAndThrowAsync(product, cancellationToken: token);
+            var productExist = await _productRepository.ExistsProductAsync(product.Id, token);
 
             if (!productExist)
             {
                 return null;
             }
 
-            await _productRepository.UpdateProductAsync(product);
+            await _productRepository.UpdateProductAsync(product, token);
             return product;
         }
 
-        public Task<bool> DeleteProductAsync(Guid id)
+        public Task<bool> DeleteProductAsync(Guid id, CancellationToken token = default)
         {
-            return _productRepository.DeleteProductAsync(id);
+            return _productRepository.DeleteProductAsync(id, token);
         }
     }
 }

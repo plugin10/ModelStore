@@ -9,18 +9,18 @@ namespace ModelStore.Application.Repositories
 {
     public interface IProductRepository
     {
-        Task<bool> CreateAsync(Product product);
+        Task<bool> CreateAsync(Product product, CancellationToken token = default);
 
-        Task<Product?> GetByIdAsync(Guid id);
+        Task<Product?> GetByIdAsync(Guid id, CancellationToken token = default);
 
-        Task<Product?> GetBySlugAsync(string slug);
+        Task<Product?> GetBySlugAsync(string slug, CancellationToken token = default);
 
-        Task<IEnumerable<Product>> GetAllAsync();
+        Task<IEnumerable<Product>> GetAllAsync(CancellationToken token = default);
 
-        Task<bool> UpdateProductAsync(Product product);
+        Task<bool> UpdateProductAsync(Product product, CancellationToken token = default);
 
-        Task<bool> DeleteProductAsync(Guid id);
+        Task<bool> DeleteProductAsync(Guid id, CancellationToken token = default);
 
-        Task<bool> ExistsProductAsync(Guid id);
+        Task<bool> ExistsProductAsync(Guid id, CancellationToken token = default);
     }
 }

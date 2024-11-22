@@ -18,9 +18,9 @@ namespace ModelStore.Application.Repositories
             _DBconnectionFactory = dBconnectionFactory;
         }
 
-        public async Task<bool> CreateAsync(Product product)
+        public async Task<bool> CreateAsync(Product product, CancellationToken token = default)
         {
-            using var connection = await _DBconnectionFactory.CreateConnectionAsync();
+            using var connection = await _DBconnectionFactory.CreateConnectionAsync(token);
             using var transaction = connection.BeginTransaction();
 
             var result = await connection.ExecuteAsync(new CommandDefinition
@@ -28,7 +28,8 @@ namespace ModelStore.Application.Repositories
                     INSERT INTO product (id, name, brand, slug, price, stock, description)
                     VALUES (@Id, @Name, @Brand, @Slug, @Price, @Stock, @Description);
                     """, product,
-                    transaction: transaction)
+                    transaction: transaction,
+                    cancellationToken: token)
                 );
 
             if (result > 0)
@@ -39,7 +40,8 @@ namespace ModelStore.Application.Repositories
                         INSERT INTO categorie (product_id, name)
                         VALUES (@ProductId, @Name);
                         """, new { ProductId = product.Id, Name = category },
-                        transaction: transaction));
+                        transaction: transaction,
+                        cancellationToken: token));
                 }
             }
             transaction.Commit();
@@ -47,15 +49,16 @@ namespace ModelStore.Application.Repositories
             return result > 0;
         }
 
-        public async Task<Product?> GetByIdAsync(Guid id)
+        public async Task<Product?> GetByIdAsync(Guid id, CancellationToken token = default)
         {
-            using var connection = await _DBconnectionFactory.CreateConnectionAsync();
+            using var connection = await _DBconnectionFactory.CreateConnectionAsync(token);
             var product = await connection.QuerySingleOrDefaultAsync<Product>
                 (
                     new CommandDefinition
                     ("""
                         SELECT * FROM product WHERE id = @id
-                    """, new { id })
+                    """, new { id },
+                    cancellationToken: token)
                 );
 
             if (product == null)
@@ -68,7 +71,8 @@ namespace ModelStore.Application.Repositories
                     new CommandDefinition
                     ("""
                         SELECT * FROM categorie WHERE product_id = @id
-                    """, new { id })
+                    """, new { id },
+                    cancellationToken: token)
                 );
 
             foreach (var category in categories)
@@ -81,24 +85,25 @@ namespace ModelStore.Application.Repositories
                     new CommandDefinition
                     ("""
                         SELECT AVG(CAST(rating_score AS FLOAT)) FROM rating WHERE product_id = @id
-                    """, new { id })
+                    """, new { id },
+                    cancellationToken: token)
                 );
 
             product.Rating = rating;
-            
 
             return product;
         }
 
-        public async Task<Product?> GetBySlugAsync(string slug)
+        public async Task<Product?> GetBySlugAsync(string slug, CancellationToken token = default)
         {
-            using var connection = await _DBconnectionFactory.CreateConnectionAsync();
+            using var connection = await _DBconnectionFactory.CreateConnectionAsync(token);
             var product = await connection.QuerySingleOrDefaultAsync<Product>
                 (
                     new CommandDefinition
                     ("""
                         SELECT * FROM product WHERE slug = @slug
-                    """, new { slug })
+                    """, new { slug },
+                    cancellationToken: token)
                 );
 
             if (product == null)
@@ -111,7 +116,8 @@ namespace ModelStore.Application.Repositories
                     new CommandDefinition
                     ("""
                         SELECT * FROM categorie WHERE product_id = @id
-                    """, new { id = product.Id })
+                    """, new { id = product.Id },
+                    cancellationToken: token)
                 );
 
             foreach (var category in categories)
@@ -124,7 +130,8 @@ namespace ModelStore.Application.Repositories
                     new CommandDefinition
                     ("""
                         SELECT AVG(CAST(rating_score AS FLOAT)) FROM rating WHERE product_id = @id
-                    """, new { id = product.Id })
+                    """, new { id = product.Id },
+                    cancellationToken: token)
                 );
 
             product.Rating = rating;
@@ -132,22 +139,22 @@ namespace ModelStore.Application.Repositories
             return product;
         }
 
-        public async Task<IEnumerable<Product>> GetAllAsync()
+        public async Task<IEnumerable<Product>> GetAllAsync(CancellationToken token = default)
         {
-            using var connection = await _DBconnectionFactory.CreateConnectionAsync();
+            using var connection = await _DBconnectionFactory.CreateConnectionAsync(token);
 
             var result = await connection.QueryAsync
                 (
                     new CommandDefinition
                     ("""
-                        SELECT p.*, 
-                        STRING_AGG(c.name, ',') AS categories, 
+                        SELECT p.*,
+                        STRING_AGG(c.name, ',') AS categories,
                         AVG(CAST(r.rating_score AS FLOAT)) AS rating_score
                         FROM product p
                         LEFT JOIN categorie c ON p.id = c.product_id
                         LEFT JOIN rating r ON p.id = r.product_id
                         GROUP BY p.id, p.name, p.brand, p.slug, p.price, p.stock, p.description
-                    """)
+                    """, cancellationToken: token)
                 );
 
             return result.Select(p => new Product
@@ -161,12 +168,11 @@ namespace ModelStore.Application.Repositories
                 Categories = Enumerable.ToList(p.categories.Split(',')),
                 Description = p.description,
             });
-
         }
 
-        public async Task<bool> UpdateProductAsync(Product product)
+        public async Task<bool> UpdateProductAsync(Product product, CancellationToken token = default)
         {
-            using var connection = await _DBconnectionFactory.CreateConnectionAsync();
+            using var connection = await _DBconnectionFactory.CreateConnectionAsync(token);
             using var transaction = connection.BeginTransaction();
 
             await connection.ExecuteAsync
@@ -174,7 +180,8 @@ namespace ModelStore.Application.Repositories
                     ("""
                         DELETE FROM categorie WHERE product_id = @id
                     """, new { id = product.Id },
-                    transaction: transaction)
+                    transaction: transaction,
+                    cancellationToken: token)
                 );
 
             foreach (var category in product.Categories)
@@ -184,31 +191,33 @@ namespace ModelStore.Application.Repositories
                         INSERT INTO categorie (product_id, name)
                         VALUES (@ProductId, @Name);
                         """, new { ProductId = product.Id, Name = category },
-                    transaction: transaction)
+                    transaction: transaction,
+                    cancellationToken: token)
                     );
             }
 
             var result = await connection.ExecuteAsync(
                 new CommandDefinition("""
-                        UPDATE product SET 
-                        slug = @Slug, 
-                        name = @Name, 
-                        brand = @Brand, 
-                        price = @Price, 
-                        stock = @Stock, 
+                        UPDATE product SET
+                        slug = @Slug,
+                        name = @Name,
+                        brand = @Brand,
+                        price = @Price,
+                        stock = @Stock,
                         description = @Description
                         WHERE id = @Id;
                         """, product,
-                    transaction: transaction)
+                    transaction: transaction,
+                    cancellationToken: token)
                 );
 
             transaction.Commit();
             return result > 0;
         }
 
-        public async Task<bool> DeleteProductAsync(Guid id)
+        public async Task<bool> DeleteProductAsync(Guid id, CancellationToken token = default)
         {
-            using var connection = await _DBconnectionFactory.CreateConnectionAsync();
+            using var connection = await _DBconnectionFactory.CreateConnectionAsync(token);
             using var transaction = connection.BeginTransaction();
 
             await connection.ExecuteAsync
@@ -216,34 +225,38 @@ namespace ModelStore.Application.Repositories
                     ("""
                         DELETE FROM categorie WHERE product_id = @id
                     """, new { id },
-                    transaction: transaction)
+                    transaction: transaction,
+                    cancellationToken: token)
                 );
 
             await connection.ExecuteAsync(new CommandDefinition
                     ("""
                         DELETE FROM rating WHERE product_id = @id
                     """, new { id },
-                    transaction: transaction)
+                    transaction: transaction,
+                    cancellationToken: token)
                 );
 
             var result = await connection.ExecuteAsync(new CommandDefinition
                     ("""
                         DELETE FROM product WHERE id = @id
                     """, new { id },
-                    transaction: transaction)
+                    transaction: transaction,
+                    cancellationToken: token)
                 );
 
             transaction.Commit();
             return result > 0;
         }
 
-        public async Task<bool> ExistsProductAsync(Guid id)
+        public async Task<bool> ExistsProductAsync(Guid id, CancellationToken token = default)
         {
-            using var connection = await _DBconnectionFactory.CreateConnectionAsync();
+            using var connection = await _DBconnectionFactory.CreateConnectionAsync(token);
 
             return await connection.ExecuteScalarAsync<bool>(new CommandDefinition("""
                 SELECT COUNT(1) FROM products WHERE id = @id
-                """, new { id }));
+                """, new { id },
+                cancellationToken: token));
         }
     }
 }
