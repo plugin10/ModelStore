@@ -1,7 +1,6 @@
 using ModelStore.API.Mapping;
 using ModelStore.Application;
 using ModelStore.Application.Database;
-using ModelStore.Identity;
 
 namespace ModelStore.API
 {
@@ -25,7 +24,6 @@ namespace ModelStore.API
                           .AllowAnyMethod();
                 });
             });
-            builder.Services.AddScoped<TokenGenerator>();
 
             builder.Services.AddApplication();
             builder.Services.AddDatabase(config["Database:ConnectionString"]!);
