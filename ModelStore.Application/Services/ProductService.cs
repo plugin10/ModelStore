@@ -43,6 +43,8 @@ namespace ModelStore.Application.Services
 
         public async Task<Product?> UpdateProductAsync(Product product, CancellationToken token = default)
         {
+            //TO DO
+            //check why this method throw exception
             await _productValidator.ValidateAndThrowAsync(product, cancellationToken: token);
             var productExist = await _productRepository.ExistsProductAsync(product.Id, token);
 

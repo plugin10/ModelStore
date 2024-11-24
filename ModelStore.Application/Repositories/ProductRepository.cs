@@ -80,7 +80,7 @@ namespace ModelStore.Application.Repositories
                 product.Categories.Add(category);
             }
 
-            var rating = await connection.QuerySingleOrDefaultAsync<float>
+            var rating = await connection.QuerySingleOrDefaultAsync<float?>
                 (
                     new CommandDefinition
                     ("""
@@ -125,7 +125,7 @@ namespace ModelStore.Application.Repositories
                 product.Categories.Add(category);
             }
 
-            var rating = await connection.QuerySingleOrDefaultAsync<float>
+            var rating = await connection.QuerySingleOrDefaultAsync<float?>
                 (
                     new CommandDefinition
                     ("""
@@ -254,7 +254,7 @@ namespace ModelStore.Application.Repositories
             using var connection = await _DBconnectionFactory.CreateConnectionAsync(token);
 
             return await connection.ExecuteScalarAsync<bool>(new CommandDefinition("""
-                SELECT COUNT(1) FROM products WHERE id = @id
+                SELECT COUNT(1) FROM product WHERE id = @id
                 """, new { id },
                 cancellationToken: token));
         }
