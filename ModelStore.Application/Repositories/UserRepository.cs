@@ -25,7 +25,7 @@ namespace ModelStore.Application.Repositories
                 (
                     new CommandDefinition
                     ("""
-                        SELECT * FROM [user] WHERE email = @email AND password_hash = @password
+                        SELECT id, name, email, password_hash AS password, user_type AS userType  FROM [user] WHERE email = @email AND password_hash = @password
                     """, new { email, password },
                     cancellationToken: token)
                 );
