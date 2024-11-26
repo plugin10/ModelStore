@@ -18,9 +18,9 @@ namespace ModelStore.Application.Services
             _userRepository = userRepository;
         }
 
-        public Task<User?> SignInUser(string email, string password)
+        public async Task<User?> SignInUserAsync(string email, string password)
         {
-            var user = _userRepository.GetByEmailAndPasswordAsync(email, password);
+            var user = await _userRepository.GetByEmailAndPasswordAsync(email, password);
 
             if (user == null)
             {

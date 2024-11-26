@@ -26,25 +26,23 @@ namespace ModelStore.Application.Services
             return await _productRepository.CreateAsync(product, token);
         }
 
-        public Task<IEnumerable<Product>> GetAllAsync(CancellationToken token = default)
+        public async Task<IEnumerable<Product>> GetAllAsync(CancellationToken token = default)
         {
-            return _productRepository.GetAllAsync(token);
+            return await _productRepository.GetAllAsync(token);
         }
 
-        public Task<Product?> GetByIdAsync(Guid id, CancellationToken token = default)
+        public async Task<Product?> GetByIdAsync(Guid id, CancellationToken token = default)
         {
-            return _productRepository.GetByIdAsync(id, token);
+            return await _productRepository.GetByIdAsync(id, token);
         }
 
-        public Task<Product?> GetBySlugAsync(string slug, CancellationToken token = default)
+        public async Task<Product?> GetBySlugAsync(string slug, CancellationToken token = default)
         {
-            return _productRepository.GetBySlugAsync(slug, token);
+            return await _productRepository.GetBySlugAsync(slug, token);
         }
 
         public async Task<Product?> UpdateProductAsync(Product product, CancellationToken token = default)
         {
-            //TO DO
-            //check why this method throw exception
             await _productValidator.ValidateAndThrowAsync(product, cancellationToken: token);
             var productExist = await _productRepository.ExistsProductAsync(product.Id, token);
 
@@ -57,9 +55,9 @@ namespace ModelStore.Application.Services
             return product;
         }
 
-        public Task<bool> DeleteProductAsync(Guid id, CancellationToken token = default)
+        public async Task<bool> DeleteProductAsync(Guid id, CancellationToken token = default)
         {
-            return _productRepository.DeleteProductAsync(id, token);
+            return await _productRepository.DeleteProductAsync(id, token);
         }
     }
 }

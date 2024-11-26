@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using ModelStore.API.Mapping;
 using ModelStore.Application.Models;
 using ModelStore.Application.Repositories;
@@ -17,6 +18,7 @@ namespace ModelStore.API.Controllers
             _productService = productService;
         }
 
+        [Authorize(Roles = "Administrator,Employee")]
         [HttpPost(ApiEndpoints.Products.Create)]
         public async Task<IActionResult> Create([FromBody] CreateProductRequest request, CancellationToken token)
         {
@@ -52,6 +54,7 @@ namespace ModelStore.API.Controllers
             return Ok(productsResponse);
         }
 
+        [Authorize(Roles = "Administrator,Employee")]
         [HttpPut(ApiEndpoints.Products.Update)]
         public async Task<IActionResult> Update([FromRoute] Guid id,
             [FromBody] UpdateProductRequest request, CancellationToken token)
@@ -66,6 +69,7 @@ namespace ModelStore.API.Controllers
             return Ok(updatedProduct);
         }
 
+        [Authorize(Roles = "Administrator,Employee")]
         [HttpDelete(ApiEndpoints.Products.Delete)]
         public async Task<IActionResult> Delete([FromRoute] Guid id, CancellationToken token)
         {

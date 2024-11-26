@@ -9,6 +9,6 @@ namespace ModelStore.Application.Services
 {
     public interface IUserService
     {
-        Task<User?> SignInUser(string email, string password);
+        Task<User?> SignInUserAsync(string email, string password);
     }
 }

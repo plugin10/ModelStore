@@ -1,6 +1,8 @@
 using ModelStore.API.Mapping;
 using ModelStore.Application;
 using ModelStore.Application.Database;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 
 namespace ModelStore.API
 {
@@ -25,6 +27,29 @@ namespace ModelStore.API
                 });
             });
 
+            //TO DO
+            //check if Authentication service can be moved to ApplicationServiceCollectionExtensions
+            var key = "MyVerySecretTokenGeneratorKeyOnlyUseInDevelopEnviroment"u8.ToArray();
+            builder.Services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = "https://user.localhost",
+                    ValidAudience = "https://localhost",
+                    IssuerSigningKey = new SymmetricSecurityKey(key)
+                };
+            });
+            builder.Services.AddAuthorization();
+
             builder.Services.AddApplication();
             builder.Services.AddDatabase(config["Database:ConnectionString"]!);
 
@@ -38,6 +63,7 @@ namespace ModelStore.API
             }
 
             app.UseHttpsRedirection();
+            app.UseAuthentication();
             app.UseAuthorization();
             app.UseMiddleware<ValidationMappingMiddleware>();
             app.MapControllers();
