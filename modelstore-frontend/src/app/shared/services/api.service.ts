@@ -12,6 +12,16 @@ export class ApiService {
 
   constructor(private http: HttpClient) {}
 
+  login(credentials: {
+    login: string;
+    password: string;
+  }): Observable<{ token: string }> {
+    return this.http.post<{ token: string }>(
+      `${this.baseUrl}/users/login`,
+      credentials
+    );
+  }
+
   getProducts(): Observable<Product[]> {
     return this.http.get<Product[]>(`${this.baseUrl}/products`);
   }
