@@ -51,12 +51,9 @@ export class LoginComponent {
   onSubmit() {
     this.blockedlogged = true;
 
-    // console.log(this.loginForm.value);
-
     this.apiService.login(this.loginForm.value).subscribe({
       next: (data) => {
         this.authService.setToken(data.token);
-        console.log(this.authService.getToken());
         this.notificationService.showMessage(
           ToastType.SUCCESS,
           'Zalogowano pomyślnie',
