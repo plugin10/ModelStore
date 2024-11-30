@@ -3,6 +3,6 @@ export interface UpdateProductRequest {
   brand: string;
   price: number;
   stock: number;
-  categories: string[];
+  categories: number[];
   description: string;
 }

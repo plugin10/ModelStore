@@ -39,14 +39,19 @@
 
     <!-- Kategoria -->
     <p-floatLabel class="w-full">
-      <p-dropdown
+      <p-multiSelect
         class="w-full"
+        [options]="categoriesToDropdown"
+        formControlName="categories"
+        optionLabel="name"
+        placeholder="Select Cities"
+        styleClass="w-full"
+      />
+      <!-- <p-dropdown
         [options]="categoriesToDropdown"
         optionValue="code"
         formControlName="categoryId"
-        optionLabel="name"
-        styleClass="w-full"
-      ></p-dropdown>
+      ></p-dropdown> -->
       <label for="price">Kategoria</label>
     </p-floatLabel>
 

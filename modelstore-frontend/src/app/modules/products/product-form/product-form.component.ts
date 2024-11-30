@@ -14,11 +14,9 @@ import { DropdownModule } from 'primeng/dropdown';
 import { ButtonModule } from 'primeng/button';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { Guid } from 'guid-typescript';
-
-interface CategoryToDropdown {
-  name: string;
-  code: number;
-}
+import { MultiSelectModule } from 'primeng/multiselect';
+import { Category } from '../../../shared/interfaces/category';
+import { CategoryMapperService } from '../../../shared/services/category-mapper.service';
 
 @Component({
   selector: 'app-product-form',
@@ -31,12 +29,13 @@ interface CategoryToDropdown {
     DropdownModule,
     ButtonModule,
     InputTextareaModule,
+    MultiSelectModule,
   ],
   templateUrl: './product-form.component.html',
   styleUrl: './product-form.component.css',
 })
 export class ProductFormComponent implements OnInit {
-  categoriesToDropdown: CategoryToDropdown[] | undefined;
+  categoriesToDropdown: Category[] = [];
   productForm!: FormGroup;
   product: Product;
   state: string;
@@ -44,22 +43,10 @@ export class ProductFormComponent implements OnInit {
   constructor(
     public ref: DynamicDialogRef,
     public config: DynamicDialogConfig,
+    private categoryMapper: CategoryMapperService,
     private fb: FormBuilder
   ) {
-    this.categoriesToDropdown = [
-      {
-        code: 1,
-        name: 'Figurki Fantasy',
-      },
-      {
-        code: 2,
-        name: 'Figurki Historyczne',
-      },
-      {
-        code: 3,
-        name: 'Akcesoria Modelarskie',
-      },
-    ];
+    this.categoriesToDropdown = categoryMapper.categories;
     this.product = config.data.product;
     this.state = config.data.state;
     this.productForm = this.fb.group({
@@ -68,7 +55,7 @@ export class ProductFormComponent implements OnInit {
       brand: [null, [Validators.required]],
       description: [null, [Validators.required]],
       price: [null, [Validators.required]],
-      categoryId: [1, [Validators.required]],
+      categories: [[this.categoriesToDropdown[0]], [Validators.required]],
       stock: [10, [Validators.required]],
       imageUrl: [null, [Validators.required]],
     });
@@ -76,13 +63,29 @@ export class ProductFormComponent implements OnInit {
 
   ngOnInit() {
     if (this.product !== null) {
-      this.productForm.patchValue(this.product);
+      this.productForm.patchValue({
+        ...this.product,
+        categories: this.product.categories
+          .map((categoryId: number) => {
+            const category = this.categoryMapper.mapIdToCategory(categoryId);
+            if (!category) {
+              console.warn(`Nie znaleziono kategorii dla ID: ${categoryId}`);
+            }
+            return category;
+          })
+          .filter((category) => category !== null),
+      });
     } else {
     }
   }
 
   submit() {
     let newProduct = this.productForm.getRawValue();
+    newProduct.categories = this.productForm.value.categories.map(
+      (category: { code: number; name: string }) => {
+        return this.categoryMapper.mapCategoryToId(category.name);
+      }
+    );
     if (this.state === 'add') {
       newProduct.id = Guid.create();
     }

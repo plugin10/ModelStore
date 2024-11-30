@@ -1,5 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-import { Category } from '../../shared/interfaces/category';
+import { Component } from '@angular/core';
 import { Product } from '../../shared/interfaces/product';
 import { ImageModule } from 'primeng/image';
 import { TableModule } from 'primeng/table';
@@ -46,34 +45,6 @@ export class ProductsComponent {
   ref: DynamicDialogRef = new DynamicDialogRef();
 
   products: Product[] = [];
-  //   {
-  //     id: Guid.parse('05ff5cf9-3909-220f-44bf-5154020390cb'),
-  //     name: 'Elf Łucznik',
-  //     description: 'Figurka elfa łucznika o szczegółowym wykończeniu.',
-  //     price: 49.99,
-  //     rating: 4.6,
-  //     stock: 15,
-  //     imageUrl: '../../../assets/images/figurka.jpg',
-  //   },
-  //   {
-  //     id: Guid.parse('2856988f-4c4c-27a9-a63c-0b19fac95ecc'),
-  //     name: 'Rycerz Templariusz',
-  //     description: 'Figurka rycerza templariusza z epoki krucjat.',
-  //     price: 79.99,
-  //     rating: 4.0,
-  //     stock: 10,
-  //     imageUrl: '../../../assets/images/figurka.jpg',
-  //   },
-  //   {
-  //     id: Guid.parse('ac46f09c-ab1b-23ce-ef93-d2a6fa835a48'),
-  //     name: 'Farby Akrylowe Set 12',
-  //     description: 'Zestaw 12 kolorów farb akrylowych dla modelarzy.',
-  //     price: 25.99,
-  //     rating: 5,
-  //     stock: 25,
-  //     imageUrl: '../../../assets/images/figurka.jpg',
-  //   },
-  // ];
 
   constructor(
     private dialogService: DialogService,
@@ -106,16 +77,41 @@ export class ProductsComponent {
 
     this.ref.onClose.subscribe((product: Product) => {
       if (product) {
-        const index = this.products.findIndex((p) => p.id.equals(product.id));
-
-        if (index !== -1) {
-          this.products[index] = product;
-          this.products = [...this.products];
-        } else {
-          this.products = [...this.products, product];
+        if (state === 'add') {
+          this.apiService.createProduct(product).subscribe({
+            next: () => {
+              this.loadProducts();
+            },
+            error: (err) => {
+              console.error('Błąd podczas dodawania produktu:', err);
+            },
+          });
+        } else if (state === 'edit') {
+          console.log(product);
+          this.apiService.updateProduct(product.id, product).subscribe({
+            next: () => {
+              this.loadProducts();
+            },
+            error: (err) => {
+              console.error('Błąd podczas aktualizacji produktu:', err);
+            },
+          });
         }
       }
     });
+    // this.ref.onClose.subscribe((product: Product) => {
+    //   console.log(product);
+    //   if (product) {
+    //     const index = this.products.findIndex((p) => p.id.equals(product.id));
+
+    //     if (index !== -1) {
+    //       this.products[index] = product;
+    //       this.products = [...this.products];
+    //     } else {
+    //       this.products = [...this.products, product];
+    //     }
+    //   }
+    // });
   }
 
   rowSelectChanged() {
@@ -127,16 +123,16 @@ export class ProductsComponent {
     this.apiService.getProducts().subscribe({
       next: (data: any) => {
         this.products = data.items.map((item: any) => ({
-          id: Guid.parse(item.id), // Ensure the ID is parsed as a Guid
+          id: Guid.parse(item.id),
           name: item.name,
           brand: item.brand,
           slug: item.slug,
-          rating: item.rating, // This can be null or a number
+          rating: item.rating,
           price: item.price,
           stock: item.stock,
           categories: item.categories,
           description: item.description,
-          imageUrl: item.imageUrl || null, // Optional, may need a fallback
+          imageUrl: item.imageUrl || null,
         }));
       },
       error: (err) => {

@@ -1,4 +1,5 @@
 import { Guid } from 'guid-typescript';
+import { Category } from '../interfaces/category';
 
 export class Product {
   id: Guid;
@@ -8,7 +9,7 @@ export class Product {
   rating: number | null;
   price: number;
   stock: number;
-  categories: string[];
+  categories: number[];
   description: string;
   imageUrl?: string;
 
@@ -20,7 +21,7 @@ export class Product {
     rating: number | null,
     price: number,
     stock: number,
-    categories: string[],
+    categories: number[],
     description: string,
     imageUrl?: string
   ) {
