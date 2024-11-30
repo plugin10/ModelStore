@@ -34,12 +34,12 @@ namespace ModelStore.Application.Repositories
 
             if (result > 0)
             {
-                foreach (var category in product.Categories)
+                foreach (var categoryId in product.Categories)
                 {
                     await connection.ExecuteAsync(new CommandDefinition("""
-                        INSERT INTO categorie (product_id, name)
-                        VALUES (@ProductId, @Name);
-                        """, new { ProductId = product.Id, Name = category },
+                        INSERT INTO product_category (product_id, category_id)
+                        VALUES (@ProductId, @CategoryId);
+                        """, new { ProductId = product.Id, CategoryId = categoryId },
                         transaction: transaction,
                         cancellationToken: token));
                 }
@@ -66,18 +66,18 @@ namespace ModelStore.Application.Repositories
                 return null;
             }
 
-            var categories = await connection.QueryAsync<string>
+            var categoryIds = await connection.QueryAsync<int>
                 (
                     new CommandDefinition
                     ("""
-                        SELECT * FROM categorie WHERE product_id = @id
+                        SELECT category_id FROM product_category WHERE product_id = @id
                     """, new { id },
                     cancellationToken: token)
                 );
 
-            foreach (var category in categories)
+            foreach (var categoryId in categoryIds)
             {
-                product.Categories.Add(category);
+                product.Categories.Add(categoryId);
             }
 
             var rating = await connection.QuerySingleOrDefaultAsync<float?>
@@ -111,18 +111,18 @@ namespace ModelStore.Application.Repositories
                 return null;
             }
 
-            var categories = await connection.QueryAsync<string>
+            var categoryIds = await connection.QueryAsync<int>
                 (
                     new CommandDefinition
                     ("""
-                        SELECT * FROM categorie WHERE product_id = @id
+                        SELECT category_id FROM product_category WHERE product_id = @id
                     """, new { id = product.Id },
                     cancellationToken: token)
                 );
 
-            foreach (var category in categories)
+            foreach (var categoryId in categoryIds)
             {
-                product.Categories.Add(category);
+                product.Categories.Add(categoryId);
             }
 
             var rating = await connection.QuerySingleOrDefaultAsync<float?>
@@ -143,31 +143,30 @@ namespace ModelStore.Application.Repositories
         {
             using var connection = await _DBconnectionFactory.CreateConnectionAsync(token);
 
-            var result = await connection.QueryAsync
-                (
-                    new CommandDefinition
-                    ("""
-                        SELECT p.*,
-                        STRING_AGG(c.name, ',') AS categories,
-                        AVG(CAST(r.rating_score AS FLOAT)) AS rating_score
-                        FROM product p
-                        LEFT JOIN categorie c ON p.id = c.product_id
-                        LEFT JOIN rating r ON p.id = r.product_id
-                        GROUP BY p.id, p.name, p.brand, p.slug, p.price, p.stock, p.description
-                    """, cancellationToken: token)
+            var products = await connection.QueryAsync<Product>(
+                new CommandDefinition("""
+                SELECT p.*, AVG(CAST(r.rating_score AS FLOAT)) AS rating
+                FROM product p
+                LEFT JOIN rating r ON p.id = r.product_id
+                GROUP BY p.id, p.name, p.brand, p.slug, p.price, p.stock, p.description
+                """, cancellationToken: token)
+            );
+
+            foreach (var product in products)
+            {
+                var categoryIds = await connection.QueryAsync<int>(
+                    new CommandDefinition("""
+                    SELECT category_id FROM product_category WHERE product_id = @id
+                    """, new { id = product.Id },
+                        cancellationToken: token)
                 );
 
-            return result.Select(p => new Product
-            {
-                Id = p.id,
-                Name = p.name,
-                Brand = p.brand,
-                Rating = (float?)p.rating_score,
-                Price = p.price,
-                Stock = p.stock,
-                Categories = Enumerable.ToList(p.categories.Split(',')),
-                Description = p.description,
-            });
+                // Clear existing list and add retrieved categories
+                product.Categories.Clear();
+                product.Categories.AddRange(categoryIds ?? Enumerable.Empty<int>());
+            }
+
+            return products;
         }
 
         public async Task<bool> UpdateProductAsync(Product product, CancellationToken token = default)
@@ -178,22 +177,23 @@ namespace ModelStore.Application.Repositories
             await connection.ExecuteAsync
                 (new CommandDefinition
                     ("""
-                        DELETE FROM categorie WHERE product_id = @id
+                        DELETE FROM product_category WHERE product_id = @id
                     """, new { id = product.Id },
+                transaction: transaction,
+                cancellationToken: token)
+            );
+
+            foreach (var categoryId in product.Categories)
+            {
+                await connection.ExecuteAsync
+                    (new CommandDefinition
+                        ("""
+                            INSERT INTO product_category (product_id, category_id)
+                            VALUES (@ProductId, @CategoryId);
+                        """, new { ProductId = product.Id, CategoryId = categoryId },
                     transaction: transaction,
                     cancellationToken: token)
                 );
-
-            foreach (var category in product.Categories)
-            {
-                await connection.ExecuteAsync(
-                    new CommandDefinition("""
-                        INSERT INTO categorie (product_id, name)
-                        VALUES (@ProductId, @Name);
-                        """, new { ProductId = product.Id, Name = category },
-                    transaction: transaction,
-                    cancellationToken: token)
-                    );
             }
 
             var result = await connection.ExecuteAsync(
@@ -223,7 +223,7 @@ namespace ModelStore.Application.Repositories
             await connection.ExecuteAsync
                 (new CommandDefinition
                     ("""
-                        DELETE FROM categorie WHERE product_id = @id
+                        DELETE FROM product_category WHERE product_id = @id
                     """, new { id },
                     transaction: transaction,
                     cancellationToken: token)

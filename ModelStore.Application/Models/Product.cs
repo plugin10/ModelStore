@@ -23,7 +23,7 @@ namespace ModelStore.Application.Models
 
         public int Stock { get; set; }
 
-        public List<string> Categories { get; init; } = new();
+        public List<int> Categories { get; init; } = new();
 
         public string Description { get; set; }
 

@@ -41,14 +41,24 @@ namespace ModelStore.Application.Database
                 ON product (slug);
             ");
 
-            ///create category table
+            /// Create category table
             await connection.ExecuteAsync(@"
-                IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='categorie' AND xtype='U')
-                CREATE TABLE categorie (
-                    id INT IDENTITY(1,1) PRIMARY KEY,
+                IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='category' AND xtype='U')
+                CREATE TABLE category (
+                    id INT PRIMARY KEY IDENTITY(1,1),
+                    name NVARCHAR(255) NOT NULL UNIQUE
+                );
+            ");
+
+            /// Create product_category table
+            await connection.ExecuteAsync(@"
+                IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='product_category' AND xtype='U')
+                CREATE TABLE product_category (
                     product_id UNIQUEIDENTIFIER NOT NULL,
-                    name NVARCHAR(255) NOT NULL,
-                    CONSTRAINT FK_Categories_Products FOREIGN KEY (product_id) REFERENCES product(id)
+                    category_id INT NOT NULL,
+                    PRIMARY KEY (product_id, category_id),
+                    FOREIGN KEY (product_id) REFERENCES product(id),
+                    FOREIGN KEY (category_id) REFERENCES category(id)
                 );
             ");
 

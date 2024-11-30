@@ -8,13 +8,13 @@ namespace ModelStore.Contracts.Responses
 {
     public class ProductResponse
     {
-        public required Guid Id { get; init; }
+        public Guid Id { get; init; }
 
-        public required string Name { get; init; }
+        public string Name { get; init; }
 
-        public required string Brand { get; set; }
+        public string Brand { get; set; }
 
-        public required string Slug { get; set; }
+        public string Slug { get; set; }
 
         public float? Rating { get; set; }
 
@@ -22,7 +22,7 @@ namespace ModelStore.Contracts.Responses
 
         public int Stock { get; init; } = 0;
 
-        public IEnumerable<string> Categories { get; init; } = Enumerable.Empty<string>();
+        public IEnumerable<int> Categories { get; init; } = Enumerable.Empty<int>();
 
         public string Description { get; init; } = string.Empty;
     }
