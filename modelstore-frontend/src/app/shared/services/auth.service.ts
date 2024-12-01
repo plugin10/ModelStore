@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -6,23 +7,18 @@ import { Injectable } from '@angular/core';
 export class AuthService {
   private tokenKey = 'jwtToken';
 
-  setToken(token: string): void {
-    sessionStorage.setItem(this.tokenKey, token);
-  }
+  private isLoggedInSubject = new BehaviorSubject<boolean>(this.hasToken());
+  private userRoleSubject = new BehaviorSubject<string | null>(
+    this.decodeUserRole()
+  );
 
-  getToken(): string | null {
-    return sessionStorage.getItem(this.tokenKey);
-  }
+  constructor() {}
 
-  clearToken(): void {
-    sessionStorage.removeItem(this.tokenKey);
-  }
-
-  isLoggedIn(): boolean {
+  private hasToken(): boolean {
     return !!this.getToken();
   }
 
-  getUserRole(): string | null {
+  private decodeUserRole(): string | null {
     const token = this.getToken();
     if (!token) return null;
 
@@ -33,5 +29,29 @@ export class AuthService {
       console.error('Nie można odczytać roli z tokena', e);
       return null;
     }
+  }
+
+  setToken(token: string): void {
+    sessionStorage.setItem(this.tokenKey, token);
+    this.isLoggedInSubject.next(true);
+    this.userRoleSubject.next(this.decodeUserRole());
+  }
+
+  getToken(): string | null {
+    return sessionStorage.getItem(this.tokenKey);
+  }
+
+  clearToken(): void {
+    sessionStorage.removeItem(this.tokenKey);
+    this.isLoggedInSubject.next(false);
+    this.userRoleSubject.next(null);
+  }
+
+  getLoggedInStatus() {
+    return this.isLoggedInSubject.asObservable();
+  }
+
+  getUserRoleStatus() {
+    return this.userRoleSubject.asObservable();
   }
 }
