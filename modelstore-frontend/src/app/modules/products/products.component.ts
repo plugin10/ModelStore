@@ -14,6 +14,7 @@ import { CommonModule } from '@angular/common';
 import { RatingModule } from 'primeng/rating';
 import { ApiService } from '../../shared/services/api.service';
 import { HttpClientModule } from '@angular/common/http';
+import { AuthService } from '../../shared/services/auth.service';
 
 @Component({
   selector: 'app-products',
@@ -41,6 +42,8 @@ export class ProductsComponent {
   activateEditButton = false;
   activateDeleteButton = false;
   testApiProducts: any[] = [];
+  isLoggedIn = false;
+  userRole: string | null = null;
 
   ref: DynamicDialogRef = new DynamicDialogRef();
 
@@ -48,11 +51,15 @@ export class ProductsComponent {
 
   constructor(
     private dialogService: DialogService,
-    private apiService: ApiService
+    private apiService: ApiService,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
     this.loadProducts();
+    this.isLoggedIn = this.authService.isLoggedIn();
+    this.userRole = this.authService.getUserRole();
+    console.log(this.userRole);
   }
 
   showProductForm(product: Product | null, state: any) {
@@ -99,19 +106,6 @@ export class ProductsComponent {
         }
       }
     });
-    // this.ref.onClose.subscribe((product: Product) => {
-    //   console.log(product);
-    //   if (product) {
-    //     const index = this.products.findIndex((p) => p.id.equals(product.id));
-
-    //     if (index !== -1) {
-    //       this.products[index] = product;
-    //       this.products = [...this.products];
-    //     } else {
-    //       this.products = [...this.products, product];
-    //     }
-    //   }
-    // });
   }
 
   rowSelectChanged() {
@@ -139,5 +133,15 @@ export class ProductsComponent {
         console.error('Błąd podczas pobierania produktów:', err);
       },
     });
+  }
+
+  getSeverity(product: any) {
+    if (product.stock === 0) {
+      return 'danger'; // OUTOFSTOCK
+    } else if (product.stock > 0 && product.stock <= 8) {
+      return 'warning'; // LOWSTOCK
+    } else {
+      return 'success'; // INSTOCK
+    }
   }
 }
