@@ -12,6 +12,7 @@ import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { LoginComponent } from '../login/login.component';
 import { ButtonModule } from 'primeng/button';
 import { AuthService } from '../../shared/services/auth.service';
+import { CartService } from '../../shared/services/cart.service';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -37,12 +38,14 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   isLoggedIn = false;
   userRole: string | null = null;
+  cartCount = 0;
   private subscriptions: Subscription = new Subscription();
 
   constructor(
     public router: Router,
     public dialogService: DialogService,
-    private authService: AuthService
+    private authService: AuthService,
+    private cartService: CartService
   ) {}
 
   ngOnInit() {
@@ -57,6 +60,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.subscriptions.add(
       this.authService.getUserRoleStatus().subscribe((role) => {
         this.userRole = role;
+      })
+    );
+
+    this.subscriptions.add(
+      this.cartService.getCart().subscribe((cart) => {
+        this.cartCount = cart.reduce((total, item) => total + item.stock, 0);
       })
     );
   }

@@ -15,6 +15,7 @@ import { RatingModule } from 'primeng/rating';
 import { ApiService } from '../../shared/services/api.service';
 import { HttpClientModule } from '@angular/common/http';
 import { AuthService } from '../../shared/services/auth.service';
+import { CartService } from '../../shared/services/cart.service'; // Import CartService
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -52,7 +53,8 @@ export class ProductsComponent implements OnInit, OnDestroy {
   constructor(
     private dialogService: DialogService,
     private apiService: ApiService,
-    private authService: AuthService
+    private authService: AuthService,
+    private cartService: CartService // Wstrzyknięcie CartService
   ) {}
 
   ngOnInit(): void {
@@ -61,16 +63,23 @@ export class ProductsComponent implements OnInit, OnDestroy {
     this.subscriptions.add(
       this.authService.getLoggedInStatus().subscribe((status) => {
         this.isLoggedIn = status;
-        console.log('Zalogowany:', status);
       })
     );
 
     this.subscriptions.add(
       this.authService.getUserRoleStatus().subscribe((role) => {
         this.userRole = role;
-        console.log('Rola użytkownika:', role);
       })
     );
+  }
+
+  addToCart(product: Product): void {
+    console.log(product);
+    this.cartService.addToCart(product);
+  }
+
+  removeFromCart(productId: Guid): void {
+    this.cartService.removeFromCart(productId);
   }
 
   showProductForm(product: Product | null, state: any) {

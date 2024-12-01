@@ -32,15 +32,25 @@
       </a>
     </ng-template>
     <ng-template pTemplate="end">
-      <p-button
-        *ngIf="!isLoggedIn; else loggedInView"
-        (onClick)="showLoginDialog()"
-        icon="pi pi-user"
-        label="Login"
-      ></p-button>
+      <div class="flex align-items-center">
+        <p-button [text]="true"
+          ><i
+            class="pi pi-shopping-cart text-3xl text-white-alpha-90"
+            pBadge
+            [value]="cartCount"
+            severity="info"
+          ></i
+        ></p-button>
 
-      <ng-template #loggedInView>
-        <div class="flex align-items-center">
+        <p-button
+          *ngIf="!isLoggedIn; else loggedInView"
+          (onClick)="showLoginDialog()"
+          icon="pi pi-user"
+          label="Login"
+        ></p-button>
+
+        <ng-template #loggedInView>
+          <!-- <div class="flex align-items-center"> -->
           <p-avatar icon="pi pi-user" styleClass="mr-2"></p-avatar>
           <span>{{ userRole }}</span>
           <p-button
@@ -49,8 +59,9 @@
             severity="secondary"
             class="ml-2"
           ></p-button>
-        </div>
-      </ng-template>
+          <!-- </div> -->
+        </ng-template>
+      </div>
     </ng-template>
   </p-menubar>
 </header>
