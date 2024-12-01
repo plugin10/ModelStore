@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Product } from '../../shared/interfaces/product';
 import { ImageModule } from 'primeng/image';
 import { TableModule } from 'primeng/table';
@@ -15,6 +15,7 @@ import { RatingModule } from 'primeng/rating';
 import { ApiService } from '../../shared/services/api.service';
 import { HttpClientModule } from '@angular/common/http';
 import { AuthService } from '../../shared/services/auth.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-products',
@@ -36,7 +37,7 @@ import { AuthService } from '../../shared/services/auth.service';
   templateUrl: './products.component.html',
   styleUrls: ['./products.component.scss'],
 })
-export class ProductsComponent {
+export class ProductsComponent implements OnInit, OnDestroy {
   loginForm!: FormGroup;
   selectedProducts: Product[] = [];
   activateEditButton = false;
@@ -44,10 +45,9 @@ export class ProductsComponent {
   testApiProducts: any[] = [];
   isLoggedIn = false;
   userRole: string | null = null;
-
   ref: DynamicDialogRef = new DynamicDialogRef();
-
   products: Product[] = [];
+  private subscriptions: Subscription = new Subscription();
 
   constructor(
     private dialogService: DialogService,
@@ -57,15 +57,28 @@ export class ProductsComponent {
 
   ngOnInit(): void {
     this.loadProducts();
-    this.isLoggedIn = this.authService.isLoggedIn();
-    this.userRole = this.authService.getUserRole();
-    console.log(this.userRole);
+
+    // Subskrypcja stanu zalogowania
+    this.subscriptions.add(
+      this.authService.getLoggedInStatus().subscribe((status) => {
+        this.isLoggedIn = status;
+        console.log('Zalogowany:', status);
+      })
+    );
+
+    // Subskrypcja roli użytkownika
+    this.subscriptions.add(
+      this.authService.getUserRoleStatus().subscribe((role) => {
+        this.userRole = role;
+        console.log('Rola użytkownika:', role);
+      })
+    );
   }
 
   showProductForm(product: Product | null, state: any) {
     const header = 'contractor_client_register_form_header_' + state;
     this.ref = this.dialogService.open(ProductFormComponent, {
-      header: state === 'add' ? 'Dodaj nowy produkt' : 'Eytuj produkt',
+      header: state === 'add' ? 'Dodaj nowy produkt' : 'Edytuj produkt',
       width: '50%',
       height: '85%',
       style: { 'max-width': '900px' },
@@ -143,5 +156,9 @@ export class ProductsComponent {
     } else {
       return 'success'; // INSTOCK
     }
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
   }
 }
