@@ -32,10 +32,27 @@
       </a>
     </ng-template>
     <ng-template pTemplate="end">
-      <p-button (onClick)="showLoginDialog()" icon="pi pi-user" label="Login" />
-      <!-- <div class="flex align-items-center gap-2">
-            <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png" shape="circle" />
-        </div> -->
+      <!-- Jeśli użytkownik nie jest zalogowany, wyświetl przycisk logowania -->
+      <p-button
+        *ngIf="!isLoggedIn; else loggedInView"
+        (onClick)="showLoginDialog()"
+        icon="pi pi-user"
+        label="Login"
+      ></p-button>
+
+      <!-- Jeśli użytkownik jest zalogowany, wyświetl ikonę użytkownika -->
+      <ng-template #loggedInView>
+        <div class="flex align-items-center">
+          <p-avatar icon="pi pi-user" styleClass="mr-2"></p-avatar>
+          <span>{{ userRole }}</span>
+          <p-button
+            (onClick)="logout()"
+            label="Logout"
+            severity="secondary"
+            class="ml-2"
+          ></p-button>
+        </div>
+      </ng-template>
     </ng-template>
   </p-menubar>
 </header>
