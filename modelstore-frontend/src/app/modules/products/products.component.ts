@@ -58,7 +58,6 @@ export class ProductsComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.loadProducts();
 
-    // Subskrypcja stanu zalogowania
     this.subscriptions.add(
       this.authService.getLoggedInStatus().subscribe((status) => {
         this.isLoggedIn = status;
@@ -66,7 +65,6 @@ export class ProductsComponent implements OnInit, OnDestroy {
       })
     );
 
-    // Subskrypcja roli użytkownika
     this.subscriptions.add(
       this.authService.getUserRoleStatus().subscribe((role) => {
         this.userRole = role;

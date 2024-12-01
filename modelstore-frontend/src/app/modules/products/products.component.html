@@ -11,7 +11,7 @@ fix table border radius -->
     [tableStyle]="{
       'min-width': '15rem',
       width: '100%',
-      'border-radius': '8px'
+      class: 'border-round',
     }"
     dataKey="id"
     [paginator]="true"
@@ -113,7 +113,7 @@ fix table border radius -->
   </p-table>
 </div>
 
-<!-- Widok użytkownika i gościa -->
+<!-- View User i Guest -->
 <ng-template #userView>
   <p-dataView #dv [value]="products" [rows]="5" [paginator]="true">
     <ng-template pTemplate="list" let-products>

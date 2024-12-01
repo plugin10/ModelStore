@@ -32,7 +32,6 @@
       </a>
     </ng-template>
     <ng-template pTemplate="end">
-      <!-- Jeśli użytkownik nie jest zalogowany, wyświetl przycisk logowania -->
       <p-button
         *ngIf="!isLoggedIn; else loggedInView"
         (onClick)="showLoginDialog()"
@@ -40,7 +39,6 @@
         label="Login"
       ></p-button>
 
-      <!-- Jeśli użytkownik jest zalogowany, wyświetl ikonę użytkownika -->
       <ng-template #loggedInView>
         <div class="flex align-items-center">
           <p-avatar icon="pi pi-user" styleClass="mr-2"></p-avatar>
