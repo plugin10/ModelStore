@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { CartItem } from '../interfaces/cart-item';
 import { Product } from '../interfaces/product';
 import { Guid } from 'guid-typescript';
 
@@ -7,48 +8,56 @@ import { Guid } from 'guid-typescript';
   providedIn: 'root',
 })
 export class CartService {
-  private cartKey = 'cart';
-  private cart: Product[] = [];
-  private cartSubject = new BehaviorSubject<Product[]>([]);
+  private cart: CartItem[] = [];
+  private cartSubject = new BehaviorSubject<CartItem[]>([]);
 
-  constructor() {
-    const savedCart = localStorage.getItem(this.cartKey);
-    if (savedCart) {
-      this.cart = JSON.parse(savedCart);
-      this.cartSubject.next(this.cart);
-    }
-  }
+  constructor() {}
 
   getCart() {
     return this.cartSubject.asObservable();
   }
 
-  addToCart(product: Product) {
-    const existingProduct = this.cart.find((item) => item.id === product.id);
-    if (existingProduct) {
-      existingProduct.stock += 1;
+  addToCart(product: Product): void {
+    const existingItem = this.cart.find(
+      (item) => item.product.id === product.id
+    );
+
+    if (existingItem) {
+      existingItem.quantity += 1;
     } else {
-      this.cart.push({ ...product, stock: 1 });
+      this.cart.push({ product, quantity: 1 });
     }
+
     this.updateCart();
   }
 
-  removeFromCart(productId: Guid) {
-    this.cart = this.cart.filter((item) => item.id.equals(productId));
+  removeFromCart(productId: Guid): void {
+    this.cart = this.cart.filter((item) => item.product.id !== productId);
     this.updateCart();
   }
 
-  clearCart() {
+  decreaseQuantity(productId: Guid): void {
+    const existingItem = this.cart.find(
+      (item) => item.product.id === productId
+    );
+
+    if (existingItem) {
+      existingItem.quantity -= 1;
+
+      if (existingItem.quantity <= 0) {
+        this.removeFromCart(productId);
+      } else {
+        this.updateCart();
+      }
+    }
+  }
+
+  clearCart(): void {
     this.cart = [];
     this.updateCart();
   }
 
-  getCartCount(): number {
-    return this.cart.reduce((total, item) => total + item.stock, 0);
-  }
-
-  private updateCart() {
+  private updateCart(): void {
     this.cartSubject.next(this.cart);
-    localStorage.setItem(this.cartKey, JSON.stringify(this.cart));
   }
 }

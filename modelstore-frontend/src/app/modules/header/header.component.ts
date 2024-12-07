@@ -65,7 +65,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     this.subscriptions.add(
       this.cartService.getCart().subscribe((cart) => {
-        this.cartCount = cart.reduce((total, item) => total + item.stock, 0);
+        this.cartCount = cart.reduce((total, item) => total + item.quantity, 0);
       })
     );
   }
@@ -95,5 +95,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.subscriptions.unsubscribe();
+  }
+
+  navigateToCart() {
+    this.router.navigate(['/cart']);
   }
 }
