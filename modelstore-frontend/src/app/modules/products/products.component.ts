@@ -15,7 +15,7 @@ import { RatingModule } from 'primeng/rating';
 import { ApiService } from '../../shared/services/api.service';
 import { HttpClientModule } from '@angular/common/http';
 import { AuthService } from '../../shared/services/auth.service';
-import { CartService } from '../../shared/services/cart.service'; // Import CartService
+import { CartService } from '../../shared/services/cart.service';
 import { Subscription } from 'rxjs';
 
 @Component({

@@ -9,17 +9,27 @@ import { RippleModule } from 'primeng/ripple';
 import { ToastModule } from 'primeng/toast';
 import { TableModule } from 'primeng/table';
 import { Product } from '../../shared/interfaces/product';
+import { ImageModule } from 'primeng/image';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-cart',
   standalone: true,
   templateUrl: './cart.component.html',
   styleUrls: ['./cart.component.css'],
-  imports: [ButtonModule, RippleModule, ToastModule, TableModule],
+  imports: [
+    ButtonModule,
+    RippleModule,
+    ToastModule,
+    TableModule,
+    ImageModule,
+    CommonModule,
+  ],
   providers: [MessageService],
 })
 export class CartComponent implements OnInit, OnDestroy {
   cartItems: CartItem[] = [];
+  totalSum: number = 0;
   private subscriptions: Subscription = new Subscription();
 
   constructor(
@@ -31,6 +41,7 @@ export class CartComponent implements OnInit, OnDestroy {
     this.subscriptions.add(
       this.cartService.getCart().subscribe((cart) => {
         this.cartItems = cart;
+        this.totalSum = this.cartService.getTotalSum();
       })
     );
   }

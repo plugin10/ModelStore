@@ -60,4 +60,11 @@ export class CartService {
   private updateCart(): void {
     this.cartSubject.next(this.cart);
   }
+
+  getTotalSum(): number {
+    return this.cart.reduce(
+      (total, item) => total + item.product.price * item.quantity,
+      0
+    );
+  }
 }

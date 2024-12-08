@@ -3,18 +3,40 @@
     class="border-round"
     [value]="cartItems"
     [tableStyle]="{ 'min-width': '50rem' }"
+    [styleClass]="'p-datatable-tfoot'"
   >
+    <ng-template pTemplate="caption">
+      <div class="flex align-items-center justify-content-between">
+        Twój koszyk
+        <div class="flex align-items-center">
+          <p class="mr-2">Wyczyść koszyk</p>
+          <p-button (onClick)="clearCart()" icon="pi pi-eraser" class="mr-2" />
+        </div>
+      </div>
+    </ng-template>
     <ng-template pTemplate="header">
       <tr>
+        <th>Zdjęcie</th>
         <th>Nazwa</th>
         <th>Kategoria</th>
+        <th>Cena</th>
         <th style="width: 5rem">Ilość</th>
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-item>
       <tr>
+        <td>
+          <p-image
+            [src]="'../../../assets/images/image.png'"
+            alt="Image"
+            width="100"
+            class="shadow-4"
+            [preview]="true"
+          />
+        </td>
         <td>{{ item.product.name }}</td>
         <td>{{ item.product.category }}</td>
+        <td>{{ item.product.price }}</td>
         <td>
           <div class="flex align-items-center">
             <p-button
@@ -37,6 +59,13 @@
           </div>
         </td>
       </tr>
+    </ng-template>
+    <ng-template pTemplate="summary">
+      <div class="flex align-items-center justify-content-end">
+        <h3>
+          Ogólna suma: {{ totalSum | currency : "PLN" : "symbol-narrow" }}
+        </h3>
+      </div>
     </ng-template>
   </p-table>
 </div>
