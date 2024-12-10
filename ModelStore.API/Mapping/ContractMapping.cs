@@ -6,7 +6,7 @@ namespace ModelStore.API.Mapping
 {
     public static class ContractMapping
     {
-        public static Product MapToGood(this CreateProductRequest request)
+        public static Product MapToProduct(this CreateProductRequest request)
         {
             return new Product
             {
@@ -20,7 +20,7 @@ namespace ModelStore.API.Mapping
             };
         }
 
-        public static Product MapToGood(this UpdateProductRequest request, Guid id)
+        public static Product MapToProduct(this UpdateProductRequest request, Guid id)
         {
             return new Product
             {

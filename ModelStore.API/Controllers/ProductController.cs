@@ -22,7 +22,7 @@ namespace ModelStore.API.Controllers
         [HttpPost(ApiEndpoints.Products.Create)]
         public async Task<IActionResult> Create([FromBody] CreateProductRequest request, CancellationToken token)
         {
-            var product = request.MapToGood();
+            var product = request.MapToProduct();
 
             await _productService.CreateAsync(product, token);
 
@@ -59,7 +59,7 @@ namespace ModelStore.API.Controllers
         public async Task<IActionResult> Update([FromRoute] Guid id,
             [FromBody] UpdateProductRequest request, CancellationToken token)
         {
-            var product = request.MapToGood(id);
+            var product = request.MapToProduct(id);
             var updatedProduct = await _productService.UpdateProductAsync(product, token);
             if (updatedProduct == null)
             {
