@@ -19,6 +19,8 @@ namespace ModelStore.Application
             services.AddSingleton<IProductService, ProductService>();
             services.AddSingleton<IUserRepository, UserRepository>();
             services.AddSingleton<IUserService, UserService>();
+            services.AddSingleton<IOrderRepository, OrderRepository>();
+            services.AddSingleton<IOrderService, OrderService>();
             services.AddValidatorsFromAssemblyContaining<IApplicationMarker>(ServiceLifetime.Singleton);
             services.AddSingleton<TokenGenerator>();
             return services;

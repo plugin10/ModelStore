@@ -57,5 +57,36 @@ namespace ModelStore.API.Mapping
                 Items = products.Select(MapToResponse),
             };
         }
+
+        public static OrderResponse MapToResponse(this Order order)
+        {
+            return new OrderResponse
+            {
+                OrderId = order.OrderId,
+                UserId = order.UserId,
+                OrderDate = order.OrderDate,
+                Status = order.Status.ToString(),
+                Elements = order.OrderElements.Select(e => e.MapToResponse())
+            };
+        }
+
+        public static OrderElementResponse MapToResponse(this OrderElement element)
+        {
+            return new OrderElementResponse
+            {
+                OrderElementId = element.OrderElementId,
+                ProductId = element.ProductId,
+                Quantity = element.Quantity,
+                UnitPrice = element.UnitPrice
+            };
+        }
+
+        public static OrdersResponse MapToResponse(this IEnumerable<Order> orders)
+        {
+            return new OrdersResponse
+            {
+                Items = orders.Select(order => order.MapToResponse())
+            };
+        }
     }
 }

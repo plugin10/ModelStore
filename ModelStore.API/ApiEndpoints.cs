@@ -22,5 +22,13 @@
             public const string Create = Base;
             public const string Get = $"{Base}/login";
         }
+
+        public static class Orders
+        {
+            private const string Base = $"{ApiBase}/orders";
+
+            public const string GetAll = Base;
+            public const string Create = Base;
+        }
     }
 }

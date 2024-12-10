@@ -87,6 +87,30 @@ namespace ModelStore.Application.Database
                         FOREIGN KEY (product_id) REFERENCES product(id)
                     );
             ");
+
+            /// Create order table
+            await connection.ExecuteAsync(@"
+                IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='order' AND xtype='U')
+                CREATE TABLE [order] (
+                    order_id INT PRIMARY KEY IDENTITY(1,1),
+                    user_id INT NULL, -- NULL dla zamówień anonimowych
+                    order_date DATETIME DEFAULT GETDATE() NOT NULL,
+                    status NVARCHAR(50) CHECK (status IN ('Pending', 'Completed', 'Cancelled')) NOT NULL,
+                    FOREIGN KEY (user_id) REFERENCES [user](id)
+                );
+            ");
+
+            await connection.ExecuteAsync(@"
+                IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='order_element' AND xtype='U')
+                CREATE TABLE order_element (
+                    order_element_id INT PRIMARY KEY IDENTITY(1,1),
+                    order_id INT NOT NULL,
+                    product_id UNIQUEIDENTIFIER NOT NULL,
+                    quantity INT CHECK (quantity > 0) NOT NULL,
+                    FOREIGN KEY (order_id) REFERENCES [order](order_id),
+                    FOREIGN KEY (product_id) REFERENCES product(id)
+                );
+            ");
         }
     }
 }
