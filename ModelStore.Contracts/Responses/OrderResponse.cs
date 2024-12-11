@@ -16,6 +16,14 @@ namespace ModelStore.Contracts.Responses
 
         public string Status { get; init; } = string.Empty;
 
+        public string? ClientName { get; init; }
+
+        public string? ClientEmail { get; init; }
+
+        public string? ClientPhone { get; init; }
+
+        public string ShippingAddress { get; init; } = string.Empty;
+
         public IEnumerable<OrderElementResponse> Elements { get; init; } = Enumerable.Empty<OrderElementResponse>();
     }
 }

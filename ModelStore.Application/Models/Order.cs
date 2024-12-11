@@ -8,15 +8,15 @@ namespace ModelStore.Application.Models
 {
     public class Order
     {
-        public int OrderId { get; init; }
-
+        public int OrderId { get; set; }
         public int? UserId { get; set; }
-
         public DateTime OrderDate { get; set; }
-
-        public OrderStatus Status { get; set; } = OrderStatus.Pending;
-
-        public List<OrderElement> OrderElements { get; init; } = new();
+        public OrderStatus Status { get; set; }
+        public string? ClientName { get; set; }
+        public string? ClientEmail { get; set; }
+        public string? ClientPhone { get; set; }
+        public string ShippingAddress { get; set; } = string.Empty;
+        public List<OrderElement> OrderElements { get; set; } = new();
     }
 
     public enum OrderStatus

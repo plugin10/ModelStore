@@ -26,10 +26,14 @@ namespace ModelStore.Application.Repositories
                 new CommandDefinition
                 ("""
                     SELECT 
-                    order_id AS OrderId, 
-                    user_id AS UserId, 
-                    order_date AS OrderDate, 
-                    status AS Status
+                        order_id AS OrderId, 
+                        user_id AS UserId, 
+                        order_date AS OrderDate, 
+                        status AS Status,
+                        client_name AS ClientName, 
+                        client_email AS ClientEmail, 
+                        client_phone AS ClientPhone, 
+                        shipping_address AS ShippingAddress
                     FROM [order]
                 """, cancellationToken: token)
             );

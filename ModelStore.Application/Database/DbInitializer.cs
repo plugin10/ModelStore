@@ -93,9 +93,13 @@ namespace ModelStore.Application.Database
                 IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='order' AND xtype='U')
                 CREATE TABLE [order] (
                     order_id INT PRIMARY KEY IDENTITY(1,1),
-                    user_id INT NULL, -- NULL dla zamówień anonimowych
+                    user_id INT NULL,
                     order_date DATETIME DEFAULT GETDATE() NOT NULL,
                     status NVARCHAR(50) CHECK (status IN ('Pending', 'Completed', 'Cancelled')) NOT NULL,
+                    client_name NVARCHAR(255) NULL,
+                    client_email NVARCHAR(255) NULL,
+                    client_phone NVARCHAR(20) NULL,
+                    shipping_address NVARCHAR(MAX) NOT NULL,
                     FOREIGN KEY (user_id) REFERENCES [user](id)
                 );
             ");
