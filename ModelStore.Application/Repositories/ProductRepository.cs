@@ -161,7 +161,6 @@ namespace ModelStore.Application.Repositories
                         cancellationToken: token)
                 );
 
-                // Clear existing list and add retrieved categories
                 product.Categories.Clear();
                 product.Categories.AddRange(categoryIds ?? Enumerable.Empty<int>());
             }

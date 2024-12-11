@@ -4,16 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ModelStore.Contracts.Responses
+namespace ModelStore.Contracts.Requests
 {
-    public class OrderElementResponse
+    public class CreateOrderElementRequest
     {
-        public int OrderElementId { get; init; }
-
         public Guid ProductId { get; init; }
 
         public int Quantity { get; init; }
-
-        public decimal UnitPrice { get; init; }
     }
 }

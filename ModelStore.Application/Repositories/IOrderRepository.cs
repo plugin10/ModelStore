@@ -9,6 +9,8 @@ namespace ModelStore.Application.Repositories
 {
     public interface IOrderRepository
     {
+        Task<int> CreateAsync(Order order, CancellationToken token = default);
         Task<IEnumerable<Order>> GetAllAsync(CancellationToken token = default);
+        Task<Order?> GetByIdAsync(int orderId, CancellationToken token = default);
     }
 }

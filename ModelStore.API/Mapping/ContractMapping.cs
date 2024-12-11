@@ -81,6 +81,7 @@ namespace ModelStore.API.Mapping
                 OrderElementId = element.OrderElementId,
                 ProductId = element.ProductId,
                 Quantity = element.Quantity,
+                UnitPrice = element.UnitPrice,
             };
         }
 
@@ -89,6 +90,25 @@ namespace ModelStore.API.Mapping
             return new OrdersResponse
             {
                 Items = orders.Select(order => order.MapToResponse())
+            };
+        }
+
+        public static Order MapToOrder(this CreateOrderRequest request)
+        {
+            return new Order
+            {
+                UserId = request.UserId,
+                ClientName = request.ClientName,
+                ClientEmail = request.ClientEmail,
+                ClientPhone = request.ClientPhone,
+                ShippingAddress = request.ShippingAddress,
+                OrderDate = DateTime.UtcNow,
+                Status = OrderStatus.Pending,
+                OrderElements = request.Elements.Select(e => new OrderElement
+                {
+                    ProductId = e.ProductId,
+                    Quantity = e.Quantity
+                }).ToList()
             };
         }
     }
