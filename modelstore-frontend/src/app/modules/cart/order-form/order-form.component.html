@@ -1,0 +1,74 @@
+<form [formGroup]="orderForm" (ngSubmit)="submit()">
+  <div class="flex flex-column gap-5 mt-5">
+    <!-- First and Last name -->
+    <p-floatLabel class="w-full">
+      <input
+        class="w-full"
+        id="clientName"
+        type="text"
+        pInputText
+        formControlName="clientName"
+        aria-label="Imię i nazwisko"
+      />
+      <label for="clientName">Imię i nazwisko</label>
+    </p-floatLabel>
+
+    <!-- Email -->
+    <p-floatLabel class="w-full">
+      <input
+        class="w-full"
+        id="clientEmail"
+        type="email"
+        pInputText
+        formControlName="clientEmail"
+        aria-label="Email"
+      />
+      <label for="clientEmail">Email</label>
+    </p-floatLabel>
+
+    <!-- Phone -->
+    <p-floatLabel class="w-full">
+      <input
+        class="w-full"
+        id="clientPhone"
+        type="text"
+        pInputText
+        formControlName="clientPhone"
+        aria-label="Telefon"
+      />
+      <label for="clientPhone">Telefon</label>
+    </p-floatLabel>
+
+    <!-- Address -->
+    <p-floatLabel class="w-full">
+      <textarea
+        class="w-full"
+        id="deliveryAddress"
+        rows="3"
+        pInputTextarea
+        formControlName="deliveryAddress"
+        aria-label="Adres dostawy"
+      ></textarea>
+      <label for="deliveryAddress">Adres dostawy</label>
+    </p-floatLabel>
+  </div>
+
+  <!-- Buttons -->
+  <div class="flex justify-content-between mt-4">
+    <button
+      pButton
+      type="submit"
+      label="Złóż zamówienie"
+      class="p-button-success"
+      [disabled]="orderForm.invalid"
+    ></button>
+
+    <button
+      pButton
+      type="button"
+      label="Anuluj"
+      class="p-button-text"
+      (click)="cancel()"
+    ></button>
+  </div>
+</form>

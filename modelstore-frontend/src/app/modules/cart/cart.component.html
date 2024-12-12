@@ -69,7 +69,7 @@
     </ng-template>
     <ng-template pTemplate="summary">
       <div class="flex align-items-center justify-content-between">
-        <p-button label="Zamawiamy!"></p-button>
+        <p-button label="Zamawiamy!" (onClick)="openOrderForm()"></p-button>
 
         <h3>
           Ogólna suma: {{ totalSum | currency : "PLN" : "symbol-narrow" }}
