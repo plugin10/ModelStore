@@ -36,7 +36,7 @@ export class OrderFormComponent {
       clientName: [null, [Validators.required]],
       clientEmail: [null, [Validators.required, Validators.email]],
       clientPhone: [null, [Validators.required, Validators.pattern(/^\d{9}$/)]],
-      deliveryAddress: [null, [Validators.required]],
+      shippingAddress: [null, [Validators.required]],
     });
   }
 

@@ -1,14 +1,13 @@
+import { OrderElement } from './order-element';
+
 export interface Order {
   id: number;
   userId: number;
   orderDate: Date;
-  status: string; // np. "pending", "shipped", "completed"
-  items: OrderItem[];
-  totalAmount: number;
-}
-
-export interface OrderItem {
-  productId: number;
-  quantity: number;
-  price: number; // Cena jednostkowa w momencie zamówienia
+  status: string;
+  clientName: string;
+  clientEmail: string;
+  clientPhone: string;
+  shippingAddress: string;
+  orderElements: OrderElement[];
 }
