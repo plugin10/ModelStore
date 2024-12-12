@@ -7,7 +7,7 @@
   >
     <ng-template pTemplate="caption">
       <div class="flex align-items-center justify-content-between">
-        Twój koszyk
+        <h1>Twój koszyk</h1>
         <div class="flex align-items-center">
           <p class="mr-2">Wyczyść koszyk</p>
           <p-button (onClick)="clearCart()" icon="pi pi-eraser" class="mr-2" />
@@ -19,8 +19,9 @@
         <th>Zdjęcie</th>
         <th>Nazwa</th>
         <th>Kategoria</th>
-        <th>Cena</th>
-        <th style="width: 5rem">Ilość</th>
+        <th>Cena (szt.)</th>
+        <th class="text-center" style="width: 5rem">Ilość</th>
+        <th class="text-right">Suma</th>
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-item>
@@ -36,7 +37,7 @@
         </td>
         <td>{{ item.product.name }}</td>
         <td>{{ item.product.category }}</td>
-        <td>{{ item.product.price }}</td>
+        <td>{{ item.product.price | currency : "PLN" : "symbol-narrow" }}</td>
         <td>
           <div class="flex align-items-center">
             <p-button
@@ -58,10 +59,18 @@
             ></p-button>
           </div>
         </td>
+        <td class="text-right">
+          {{
+            item.product.price * item.quantity
+              | currency : "PLN" : "symbol-narrow"
+          }}
+        </td>
       </tr>
     </ng-template>
     <ng-template pTemplate="summary">
-      <div class="flex align-items-center justify-content-end">
+      <div class="flex align-items-center justify-content-between">
+        <p-button label="Zamawiamy!"></p-button>
+
         <h3>
           Ogólna suma: {{ totalSum | currency : "PLN" : "symbol-narrow" }}
         </h3>

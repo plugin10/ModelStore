@@ -82,7 +82,7 @@ fix table border radius -->
             [preview]="true"
           />
         </td>
-        <td>{{ product.price | currency : "USD" }}</td>
+        <td>{{ product.price | currency : "PLN" : "symbol-narrow" }}</td>
         <td>{{ product.category }}</td>
         <td>
           <p-rating
@@ -113,7 +113,7 @@ fix table border radius -->
   </p-table>
 </div>
 
-<!-- View User i Guest -->
+<!-- View User and Guest -->
 <ng-template #userView>
   <p-dataView #dv [value]="products" [rows]="5" [paginator]="true">
     <ng-template pTemplate="list" let-products>
@@ -186,7 +186,7 @@ fix table border radius -->
               </div>
               <div class="flex flex-column md:align-items-end gap-5">
                 <span class="text-xl font-semibold text-900">{{
-                  "$" + item.price
+                  item.price | currency : "PLN" : "symbol-narrow"
                 }}</span>
                 <div class="flex flex-row-reverse md:flex-row gap-2">
                   <p-button
