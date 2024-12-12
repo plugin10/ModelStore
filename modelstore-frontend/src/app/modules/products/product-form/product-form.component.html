@@ -1,6 +1,6 @@
 <form [formGroup]="productForm" (ngSubmit)="submit()">
   <div class="flex flex-column gap-5 mt-5">
-    <!-- Nazwa produktu -->
+    <!-- Product name -->
     <p-floatLabel class="w-full">
       <input
         class="w-full"
@@ -13,7 +13,7 @@
       <label for="name">Nazwa produktu</label>
     </p-floatLabel>
 
-    <!-- Opis -->
+    <!-- Description -->
     <p-floatLabel class="w-full">
       <textarea
         class="w-full"
@@ -25,7 +25,7 @@
       <label for="description">Opis produktu</label>
     </p-floatLabel>
 
-    <!-- Cena -->
+    <!-- Price -->
     <p-floatLabel class="w-full">
       <input
         class="w-full"
@@ -37,7 +37,7 @@
       <label for="price">Cena (PLN)</label>
     </p-floatLabel>
 
-    <!-- Kategoria -->
+    <!-- Categories -->
     <p-floatLabel class="w-full">
       <p-multiSelect
         class="w-full"
@@ -50,7 +50,7 @@
       <label for="price">Kategoria</label>
     </p-floatLabel>
 
-    <!-- Dostępność -->
+    <!-- Stock -->
     <p-floatLabel class="w-full">
       <input
         class="w-full"
@@ -63,7 +63,7 @@
       <label for="stock">Dostępność (ilość)</label>
     </p-floatLabel>
 
-    <!-- URL obrazka -->
+    <!-- Image URL -->
     <p-floatLabel class="w-full">
       <input
         class="w-full"
@@ -76,7 +76,7 @@
       <label for="imageUrl">Adres URL obrazka</label>
     </p-floatLabel>
 
-    <!-- Producent -->
+    <!-- Brand -->
     <p-floatLabel class="w-full">
       <input
         class="w-full"
