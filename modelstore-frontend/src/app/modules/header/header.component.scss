@@ -1,17 +1,28 @@
 header {
-    background-color: #252526;
-    padding: 20px  10px;
+  background-color: #687aa6;
+  padding: 20px 10px;
 }
 
 :host::ng-deep {
-    .p-menubar {
-        padding: 0.5rem;
-        background: #252526;
-        color: #4b5563;
-        border: none;
-        border-radius: 6px;
-    }
-    .align-items-center {
-        color: #f29f05 !important;
-    }
+  .p-menubar {
+    padding: 0.5rem;
+    background: #687aa6;
+    color: #4b5563;
+    border: none;
+    border-radius: 6px;
+  }
+  .p-menuitem-link {
+    color: white !important;
+    border-radius: 6px;
+    // background: white !important;
+    // border-radius: 6px;
+    // margin-right: 0.5rem;
+  }
+  .p-menuitem-link:hover {
+    color: #687aa6 !important;
+    background: white;
+    // background: white !important;
+    // border-radius: 6px;
+    // margin-right: 0.5rem;
+  }
 }

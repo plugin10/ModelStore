@@ -1,5 +1,5 @@
 <header>
-  <p-menubar [model]="items" styleClass="col-12 md:col-10 md:col-offset-1 mt-4">
+  <p-menubar [model]="items" styleClass="col-12 md:col-10 md:col-offset-1">
     <ng-template pTemplate="start">
       <img
         class="mr-3"
@@ -11,7 +11,7 @@
     <ng-template pTemplate="item" let-item let-root="root">
       <a pRipple class="flex align-items-center p-menuitem-link">
         <span [class]="item.icon"></span>
-        <span class="ml-2">{{ item.label }}</span>
+        <span>{{ item.label }}</span>
         <p-badge
           *ngIf="item.badge"
           [ngClass]="{ 'ml-auto': !root, 'ml-2': root }"

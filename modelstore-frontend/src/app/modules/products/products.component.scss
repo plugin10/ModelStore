@@ -1,41 +1,23 @@
-/* Tło całej tabeli */
-p-table {
-  background-color: #2d2d2f !important;
-  color: #f29f05 !important; /* Tekst */
-}
+:host::ng-deep {
+  .p-paginator {
+    margin-top: 0.5rem;
+  }
 
-/* Styl nagłówków */
-p-table thead th {
-  background-color: #4b5563 !important; /* Tło nagłówków */
-  color: #f29f05 !important; /* Tekst nagłówków */
-  border-bottom: 1px solid #3b3b3d !important; /* Obramowanie nagłówków */
-  text-align: center;
-}
+  .p-dataview .p-dataview-content {
+    border-radius: 0.5rem;
+  }
 
-/* Styl wierszy */
-p-table tbody tr {
-  background-color: #2d2d2f !important; /* Tło wierszy */
-  border-bottom: 1px solid #3b3b3d !important; /* Obramowanie wierszy */
-  color: #f29f05 !important; /* Tekst */
-}
+  .grid-nogutter {
+    background: #d9d9d9;
+  }
 
-/* Hover na wierszach */
-p-table tbody tr:hover {
-  background-color: #38383b !important; /* Tło hover */
-  color: #f29f05 !important; /* Tekst hover */
-}
+  .p-button {
+    background: #3e507a;
+    border: 1px solid #3e507a;
+  }
 
-/* Checkboxy */
-p-tableCheckbox .p-checkbox-box {
-  background-color: #4b5563 !important;
-  border-color: #3b3b3d !important;
-}
-
-p-tableCheckbox .p-checkbox-box:hover {
-  background-color: #38383b !important;
-}
-
-/* Obramowanie */
-p-table .p-datatable-gridlines .p-datatable-tbody > tr > td {
-  border-color: #3b3b3d !important; /* Obramowanie komórek */
+  .p-button:hover {
+    border: 1px solid #687aa6;
+    background: #687aa6;
+  }
 }
