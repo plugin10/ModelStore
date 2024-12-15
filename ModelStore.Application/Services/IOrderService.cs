@@ -14,5 +14,7 @@ namespace ModelStore.Application.Services
         Task<IEnumerable<Order>> GetAllAsync(CancellationToken token = default);
 
         Task<Order?> GetByIdAsync(int orderId, CancellationToken token = default);
+        Task<List<Product>> GetFrequentlyBoughtTogetherAsync(Guid productId, int count, CancellationToken token);
+        Task<List<Product>> GetTopSellingProductsAsync(int topCount, CancellationToken token);
     }
 }

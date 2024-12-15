@@ -59,5 +59,19 @@ namespace ModelStore.Application.Services
         {
             return await _productRepository.DeleteProductAsync(id, token);
         }
+
+        public async Task<List<Product>> GetProductsByIdsAsync(IEnumerable<Guid> productIds, CancellationToken token)
+        {
+            var products = new List<Product>();
+            foreach (var id in productIds)
+            {
+                var product = await _productRepository.GetByIdAsync(id, token);
+                if (product != null)
+                {
+                    products.Add(product);
+                }
+            }
+            return products;
+        }
     }
 }

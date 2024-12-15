@@ -20,5 +20,6 @@ namespace ModelStore.Application.Services
         Task<Product?> UpdateProductAsync(Product product, CancellationToken token = default);
 
         Task<bool> DeleteProductAsync(Guid id, CancellationToken token = default);
+        Task<List<Product>> GetProductsByIdsAsync(IEnumerable<Guid> productIds, CancellationToken token);
     }
 }

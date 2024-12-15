@@ -31,5 +31,13 @@
             public const string GetAll = Base;
             public const string Get = $"{Base}/{{orderId}}";
         }
+
+        public static class Recommendations
+        {
+            private const string Base = $"{ApiBase}/recomendations";
+
+            public const string TopSelling = $"{Base}/top-selling";
+            public const string FrequentlyBoughtTogether = $"{Base}/frequently-bought-together/{{productId}}";
+        }
     }
 }

@@ -158,5 +158,47 @@ namespace ModelStore.Application.Repositories
             transaction.Commit();
             return orderId;
         }
+
+        public async Task<List<Guid>> GetTopSellingProductIdsAsync(int count, CancellationToken token)
+        {
+            using var connection = await _dbConnectionFactory.CreateConnectionAsync(token);
+
+            var productIds = await connection.QueryAsync<Guid>(
+                new CommandDefinition(
+                    """
+                        SELECT TOP (@Count) oe.product_id
+                        FROM order_element oe
+                        GROUP BY oe.product_id
+                        ORDER BY SUM(oe.quantity) DESC
+                    """,
+                    new { Count = count },
+                    cancellationToken: token
+                )
+            );
+
+            return productIds.ToList();
+        }
+
+        public async Task<List<Guid>> GetFrequentlyBoughtTogetherIdsAsync(Guid productId, int count, CancellationToken token)
+        {
+            using var connection = await _dbConnectionFactory.CreateConnectionAsync(token);
+
+            var relatedProductIds = await connection.QueryAsync<Guid>(
+                new CommandDefinition(
+                    """
+                        SELECT TOP (@Count) oe_related.product_id
+                        FROM order_element oe_related
+                        INNER JOIN order_element oe_target ON oe_related.order_id = oe_target.order_id
+                        WHERE oe_target.product_id = @ProductId AND oe_related.product_id != @ProductId
+                        GROUP BY oe_related.product_id
+                        ORDER BY SUM(oe_related.quantity) DESC
+                    """,
+                    new { ProductId = productId, Count = count },
+                    cancellationToken: token
+                )
+            );
+
+            return relatedProductIds.ToList();
+        }
     }
 }
