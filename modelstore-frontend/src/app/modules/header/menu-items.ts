@@ -2,13 +2,19 @@ import { MenuItem } from 'primeng/api';
 
 export const getMenuItems = (context: any): MenuItem[] => [
   {
+    label: 'Strona Główna',
+    command: () => {
+      context.router.navigate(['/products']);
+    },
+  },
+  {
     label: 'Produkty',
     command: () => {
       context.router.navigate(['/products']);
     },
   },
   {
-    label: 'Koszyk',
+    label: 'Zamówienia',
     command: () => {
       context.router.navigate(['/login']);
     },
