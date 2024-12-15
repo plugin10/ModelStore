@@ -1,0 +1,25 @@
+:host::ng-deep {
+  .p-datatable .p-datatable-header {
+    border-top-left-radius: 0.5rem;
+    border-top-right-radius: 0.5rem;
+  }
+
+  .p-datatable .p-datatable-footer {
+    border-bottom-left-radius: 0.5rem;
+    border-bottom-right-radius: 0.5rem;
+  }
+
+  .p-dataview .p-dataview-content {
+    border-radius: 0.5rem !important;
+  }
+
+  .p-button {
+    background: #3e507a;
+    border: 1px solid #3e507a;
+  }
+
+  .p-button:hover {
+    border: 1px solid #687aa6;
+    background: #687aa6;
+  }
+}

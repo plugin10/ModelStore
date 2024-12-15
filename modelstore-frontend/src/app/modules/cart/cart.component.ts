@@ -15,12 +15,16 @@ import { OrderFormComponent } from './order-form/order-form.component';
 import { DynamicDialogRef, DialogService } from 'primeng/dynamicdialog';
 import { OrderService } from '../../shared/services/order.service';
 import { CreateOrderRequest } from '../../shared/interfaces/requests/create-order-request';
+import { RecommendationService } from '../../shared/services/recommendation.service';
+import { DataViewModule } from 'primeng/dataview';
+import { TagModule } from 'primeng/tag';
+import { RatingModule } from 'primeng/rating';
 
 @Component({
   selector: 'app-cart',
   standalone: true,
   templateUrl: './cart.component.html',
-  styleUrls: ['./cart.component.css'],
+  styleUrl: './cart.component.scss',
   imports: [
     ButtonModule,
     RippleModule,
@@ -28,12 +32,16 @@ import { CreateOrderRequest } from '../../shared/interfaces/requests/create-orde
     TableModule,
     ImageModule,
     CommonModule,
+    DataViewModule,
+    TagModule,
   ],
   providers: [MessageService, DialogService],
 })
 export class CartComponent implements OnInit, OnDestroy {
+  layout: any = 'grid';
   cartItems: CartItem[] = [];
   totalSum: number = 0;
+  topSellingProducts: Product[] = [];
   private subscriptions: Subscription = new Subscription();
   ref: DynamicDialogRef | undefined;
 
@@ -41,7 +49,8 @@ export class CartComponent implements OnInit, OnDestroy {
     private cartService: CartService,
     private messageService: MessageService,
     private dialogService: DialogService,
-    private orderService: OrderService
+    private orderService: OrderService,
+    private recommendationService: RecommendationService
   ) {}
 
   ngOnInit(): void {
@@ -51,6 +60,47 @@ export class CartComponent implements OnInit, OnDestroy {
         this.totalSum = this.cartService.getTotalSum();
       })
     );
+
+    this.fetchTopSellingProducts();
+
+    this.topSellingProducts = [
+      new Product(
+        Guid.create(),
+        'Airbrush Paint Set',
+        'HobbyTech',
+        'airbrush-paint-set',
+        4.5,
+        99.99,
+        25,
+        [1, 2],
+        'Zestaw farb do aerografu, idealny dla modelarzy.',
+        'https://via.placeholder.com/150'
+      ),
+      new Product(
+        Guid.create(),
+        'Plastic Model Kit',
+        'ModelMaker',
+        'plastic-model-kit',
+        4.8,
+        149.99,
+        10,
+        [3],
+        'Zaawansowany zestaw do budowy modeli plastikowych.',
+        'https://via.placeholder.com/150'
+      ),
+      new Product(
+        Guid.create(),
+        'Brush Set for Miniatures',
+        'PaintPro',
+        'brush-set-miniatures',
+        4.7,
+        29.99,
+        50,
+        [2],
+        'Zestaw precyzyjnych pędzli do malowania figurek.',
+        'https://via.placeholder.com/150'
+      ),
+    ];
   }
 
   increaseQuantity(product: Product): void {
@@ -131,6 +181,17 @@ export class CartComponent implements OnInit, OnDestroy {
         });
       },
     });
+  }
+
+  fetchTopSellingProducts(): void {
+    // this.recommendationService.getTopSellingProducts().subscribe({
+    //   // next: (products) => (this.topSellingProducts = products),
+    //   next: (products) => {
+    //     this.topSellingProducts = products;
+    //     console.log('Bestsellery:', this.topSellingProducts);
+    //   },
+    //   error: (err) => console.error('Błąd pobierania bestsellerów:', err),
+    // });
   }
 
   ngOnDestroy(): void {
