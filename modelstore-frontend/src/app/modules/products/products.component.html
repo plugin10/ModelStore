@@ -116,6 +116,53 @@ fix table border radius -->
 <!-- View User and Guest -->
 <ng-template #userView>
   <p-dataView #dv [value]="products" [rows]="5" [paginator]="true">
+    <ng-template pTemplate="header">
+      <div class="flex flex-column">
+        <div class="formgroup-inline">
+          <div class="field">
+            <!-- Name -->
+            <p-floatLabel class="w-full">
+              <input
+                class="w-full"
+                id="name"
+                type="text"
+                pInputText
+                class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary"
+                aria-label="Nazwa produktu"
+              />
+              <label for="name">Nazwa produktu</label>
+            </p-floatLabel>
+          </div>
+          <div class="field">
+            <!-- Brand -->
+            <p-floatLabel class="w-full">
+              <input
+                class="w-full"
+                id="brand"
+                type="text"
+                pInputText
+                aria-label="Producent"
+                class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary"
+              />
+              <label for="brand">Producent</label>
+            </p-floatLabel>
+          </div>
+          <div class="field">
+            <!-- Categories -->
+            <p-floatLabel class="w-full">
+              <p-multiSelect
+                class="w-full"
+                optionLabel="name"
+                placeholder="Kategoria"
+                styleClass="w-full"
+              />
+              <label for="price">Kategoria</label>
+            </p-floatLabel>
+          </div>
+          <p-button>Filtruj</p-button>
+        </div>
+      </div>
+    </ng-template>
     <ng-template pTemplate="list" let-products>
       <div class="grid grid-nogutter">
         <div
@@ -135,7 +182,7 @@ fix table border radius -->
                 class="border-round shadow-4"
                 [alt]="item.name"
               />
-              <p-tag
+              <!-- <p-tag
                 [value]="
                   item.stock > 8
                     ? 'W MAGAZYNIE'
@@ -147,7 +194,7 @@ fix table border radius -->
                 class="absolute"
                 [style.left.px]="4"
                 [style.top.px]="4"
-              ></p-tag>
+              ></p-tag> -->
             </div>
             <div
               class="flex flex-column md:flex-row justify-content-between md:align-items-center flex-1 gap-4"
@@ -157,7 +204,7 @@ fix table border radius -->
               >
                 <div>
                   <span class="font-medium text-secondary text-sm">{{
-                    item.category
+                    item.categoriesText
                   }}</span>
                   <div class="text-lg font-medium text-900 mt-2">
                     {{ item.name }}
@@ -193,7 +240,7 @@ fix table border radius -->
                     (onClick)="addToCart(item)"
                     icon="pi pi-shopping-cart"
                     class="flex-auto md:flex-initial white-space-nowrap"
-                    label="Buy Now"
+                    label="Kup teraz"
                     [disabled]="item.stock === 0"
                   ></p-button>
                 </div>
