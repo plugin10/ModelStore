@@ -19,5 +19,7 @@ namespace ModelStore.Contracts.Requests
         public IEnumerable<int> Categories { get; init; } = Enumerable.Empty<int>();
 
         public string Description { get; init; } = string.Empty;
+
+        public int? Promotion { get; set; }
     }
 }

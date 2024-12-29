@@ -148,7 +148,7 @@ namespace ModelStore.Application.Repositories
                 SELECT p.*, AVG(CAST(r.rating_score AS FLOAT)) AS rating
                 FROM product p
                 LEFT JOIN rating r ON p.id = r.product_id
-                GROUP BY p.id, p.name, p.brand, p.slug, p.price, p.stock, p.description
+                GROUP BY p.id, p.name, p.brand, p.slug, p.price, p.stock, p.description, p.promotion
                 """, cancellationToken: token)
             );
 

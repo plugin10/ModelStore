@@ -17,6 +17,7 @@ namespace ModelStore.API.Mapping
                 Stock = request.Stock,
                 Categories = request.Categories.ToList(),
                 Description = request.Description,
+                Promotion = request.Promotion,
             };
         }
 
@@ -31,6 +32,7 @@ namespace ModelStore.API.Mapping
                 Stock = request.Stock,
                 Categories = request.Categories.ToList(),
                 Description = request.Description,
+                Promotion = request.Promotion,
             };
         }
 
@@ -46,7 +48,8 @@ namespace ModelStore.API.Mapping
                 Price = product.Price,
                 Stock = product.Stock,
                 Categories = product.Categories,
-                Description = product.Description
+                Description = product.Description,
+                Promotion = product.Promotion
             };
         }
 

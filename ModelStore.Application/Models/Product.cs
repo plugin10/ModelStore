@@ -27,6 +27,8 @@ namespace ModelStore.Application.Models
 
         public string Description { get; set; }
 
+        public int? Promotion { get; set; }
+
         private string GenetateSlug()
         {
             var sluggedName = SlugRegex().Replace(Name, string.Empty)
