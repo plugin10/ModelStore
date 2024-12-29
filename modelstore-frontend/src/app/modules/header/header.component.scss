@@ -1,12 +1,12 @@
 header {
-  background-color: #687aa6;
+  background-color: #d62906;
   padding: 20px 10px;
 }
 
 :host::ng-deep {
   .p-menubar {
     padding: 0.5rem;
-    background: #687aa6;
+    background: #d62906;
     color: #4b5563;
     border: none;
     border-radius: 6px;
@@ -14,15 +14,33 @@ header {
   .p-menuitem-link {
     color: white !important;
     border-radius: 6px;
-    // background: white !important;
-    // border-radius: 6px;
-    // margin-right: 0.5rem;
+    font-size: 20px;
+    font-weight: 700;
   }
   .p-menuitem-link:hover {
-    color: #687aa6 !important;
+    color: #d62906 !important;
     background: white;
-    // background: white !important;
-    // border-radius: 6px;
-    // margin-right: 0.5rem;
+    font-size: 20px;
+    font-weight: 700;
+  }
+
+  .p-button {
+    font-size: 16px;
+    font-weight: 700;
+  }
+
+  .p-button-login {
+    background: white !important;
+    border: 1px solid white !important;
+    color: #9c1b0c;
+  }
+
+  .p-button-login:hover {
+    border: 1px solid #687aa6 !important;
+    background: #687aa6 !important;
+  }
+
+  .p-overlay-badge .p-badge {
+    background-color: #9c1b0c;
   }
 }

@@ -17,6 +17,9 @@ import { HttpClientModule } from '@angular/common/http';
 import { AuthService } from '../../shared/services/auth.service';
 import { CartService } from '../../shared/services/cart.service';
 import { Subscription } from 'rxjs';
+import { MultiSelectModule } from 'primeng/multiselect';
+import { FloatLabelModule } from 'primeng/floatlabel';
+import { CategoryMapperService } from '../../shared/services/category-mapper.service';
 
 @Component({
   selector: 'app-products',
@@ -34,6 +37,8 @@ import { Subscription } from 'rxjs';
     CommonModule,
     RatingModule,
     HttpClientModule,
+    MultiSelectModule,
+    FloatLabelModule,
   ],
   templateUrl: './products.component.html',
   styleUrls: ['./products.component.scss'],
@@ -54,7 +59,8 @@ export class ProductsComponent implements OnInit, OnDestroy {
     private dialogService: DialogService,
     private apiService: ApiService,
     private authService: AuthService,
-    private cartService: CartService // Wstrzyknięcie CartService
+    private cartService: CartService,
+    private categoryMapperService: CategoryMapperService
   ) {}
 
   ngOnInit(): void {
@@ -147,12 +153,25 @@ export class ProductsComponent implements OnInit, OnDestroy {
           categories: item.categories,
           description: item.description,
           imageUrl: item.imageUrl || null,
+          categoriesText: this.mapCategoriesToText(item.categories), // Mapowanie kategorii na tekst
         }));
+        console.log(this.products);
       },
       error: (err) => {
         console.error('Błąd podczas pobierania produktów:', err);
       },
     });
+  }
+
+  // Metoda pomocnicza do mapowania kategorii na tekst
+  private mapCategoriesToText(categories: number[]): string {
+    return categories
+      .map(
+        (categoryId) =>
+          this.categoryMapperService.mapIdToCategory(categoryId)?.name || ''
+      )
+      .filter((name) => name) // Filtruje puste wartości
+      .join(', '); // Łączy nazwy kategorii w jeden ciąg znaków
   }
 
   getSeverity(product: any) {

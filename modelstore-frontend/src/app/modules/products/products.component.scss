@@ -12,12 +12,32 @@
   }
 
   .p-button {
-    background: #3e507a;
-    border: 1px solid #3e507a;
+    background: #9c1b0c;
+    border: 1px solid #9c1b0c;
   }
 
   .p-button:hover {
-    border: 1px solid #687aa6;
-    background: #687aa6;
+    border: 1px solid #bd2a2a;
+    background: #bd2a2a;
+  }
+
+  p-dataview .p-dataview-header {
+    border-radius: 6px;
+    font-weight: 300;
+  }
+
+  p-multiselect .p-multiselect-label {
+    padding: 0.5rem;
+  }
+
+  .field {
+    margin-top: auto;
+    margin-bottom: auto;
+  }
+
+  .p-paginator .p-paginator-pages .p-paginator-page.p-highlight {
+    background: #d84c3c; /* Jaśniejsze tło */
+    border-color: #c23725; /* Ciemniejsze obramowanie */
+    color: #ffffff; /* Biały tekst */
   }
 }

@@ -32,10 +32,13 @@
       (click)="togglePassword = !togglePassword"
     ></i>
   </span>
+  <div class="w-full align-items-center text-center">
+    <span>Nie posiadasz konta? <a href="">Rejestracja</a></span>
+  </div>
   <p-button
     type="submit"
     label="Zaloguj"
-    severity="secondary"
+    severity="success"
     [loading]="blockedlogged"
   ></p-button>
 </form>

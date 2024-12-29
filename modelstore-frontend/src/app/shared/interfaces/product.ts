@@ -1,5 +1,4 @@
 import { Guid } from 'guid-typescript';
-import { Category } from '../interfaces/category';
 
 export class Product {
   id: Guid;
@@ -12,6 +11,8 @@ export class Product {
   categories: number[];
   description: string;
   imageUrl?: string;
+  promotion?: number;
+  categoriesText: string;
 
   constructor(
     id: Guid,
@@ -23,7 +24,9 @@ export class Product {
     stock: number,
     categories: number[],
     description: string,
-    imageUrl?: string
+    categoriesText: string,
+    imageUrl?: string,
+    promotion?: number
   ) {
     this.id = id;
     this.name = name;
@@ -34,6 +37,8 @@ export class Product {
     this.stock = stock;
     this.categories = categories;
     this.description = description;
+    this.categoriesText = categoriesText;
     this.imageUrl = imageUrl;
+    this.promotion = promotion;
   }
 }

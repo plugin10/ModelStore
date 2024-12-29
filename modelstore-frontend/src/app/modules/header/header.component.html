@@ -1,12 +1,16 @@
 <header>
   <p-menubar [model]="items" styleClass="col-12 md:col-10 md:col-offset-1">
     <ng-template pTemplate="start">
-      <img
+      <!-- <img
         class="mr-3"
         src="../../../assets/images/logo.png"
         height="50"
         width="50"
-      />
+      /> -->
+      <i
+        class="pi pi-shop text-3xl text-white-alpha-90 mr-3"
+        severity="info"
+      ></i>
     </ng-template>
     <ng-template pTemplate="item" let-item let-root="root">
       <a pRipple class="flex align-items-center p-menuitem-link">
@@ -46,7 +50,8 @@
           *ngIf="!isLoggedIn; else loggedInView"
           (onClick)="showLoginDialog()"
           icon="pi pi-user"
-          label="Login"
+          label="Zaloguj się"
+          class="p-button-login"
         ></p-button>
 
         <ng-template #loggedInView>
@@ -55,7 +60,7 @@
           <span>{{ userRole }}</span>
           <p-button
             (onClick)="logout()"
-            label="Logout"
+            label="Wyloguj się"
             severity="secondary"
             class="ml-2"
           ></p-button>
